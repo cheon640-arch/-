@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04. 프로세스 분석 · 선택 · 설비배치 — om notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Gaegu:wght@400;700&family=Geist:wght@400;500&family=Gowun+Dodum&family=JetBrains+Mono&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script defer src="assets/app.js"></script>
+<script defer src="assets/om-widgets.js"></script>
+<script defer src="assets/notes.js"></script>
+</head>
+<body data-ch="04">
+
+<div class="wrap">
+  <div class="hero">
+    <span class="kicker">4장 · 프로세스 분석 / 프로세스 선택 / 설비배치</span>
+    <h1 class="display">follow<br>the flow</h1>
+    <p class="lede">프로세스를 <span class="mk">문서화 → 평가 → 재설계</span>하는 6단계, 공정도 기호 5개, 다섯 가지 프로세스 유형, 달력 공장과 조립 라인 밸런싱 사례, 제품-프로세스 행렬, 설비배치 유형까지.</p>
+    <div class="meta">원본: OM_Chap04_student.pdf (25) · OM_Chap04_process.pdf · OM_Chap04_layout.pdf</div>
+    <div data-sticker="factory" data-rot="6" style="right:8%;top:80px;width:72px;height:72px"></div>
+    <div data-sticker="route" data-rot="-8" style="right:20%;top:200px;width:56px;height:56px"></div>
+  </div>
+
+  <div class="page-grid">
+    <aside class="toc"></aside>
+    <main class="lesson">
+
+<h2 class="part-title"><small>part 1</small>프로세스 분석</h2>
+
+<section class="card" id="intro" data-toc="프로세스란">
+  <h2>1. 서론 — 프로세스</h2>
+  <span class="slide-ref">p.2</span>
+  <ul>
+    <li><span class="blank">투입(input)을 산출(output)로 변환</span>하는 활동</li>
+    <li>하나 또는 그 이상의 활동이 공통의 목적을 위해 유기적으로 연결</li>
+    <li>기업 경영에서 프로세스는 기업의 제품이나 서비스를 생산하는 과정</li>
+  </ul>
+  <p><b>체계적인 접근</b>: 현재 프로세스를 <b>문서화</b>하고, 목표 달성의 성과 기준에 따라 <b>평가</b>한 후, <b>재설계</b>하는 절차를 수행.</p>
+</section>
+
+<section class="card" id="steps" data-toc="분석의 목적과 6단계">
+  <h2>2. 프로세스 분석의 목적과 접근방법</h2>
+  <span class="slide-ref">p.3 – 6</span>
+  <p><b>목적</b>: 생산 과정이 기업의 목표를 달성하고 있는지 파악하고 성과를 평가. 기존 생산 과정의 문제점 원인 파악, 새로 적용할 생산 과정의 성과 예측에도 이용.</p>
+  <div class="roadmap" style="flex-wrap:wrap"><span class="node">① 문제점·개선 가능성 인식</span><span class="arr">→</span><span class="node">② 분석 범위 설정</span><span class="arr">→</span><span class="node">③ 문서화</span><span class="arr">→</span><span class="node">④ 성과 평가</span><span class="arr">→</span><span class="node hot">⑤ 재설계</span><span class="arr">→</span><span class="node">⑥ 적용</span></div>
+  <div class="tbl-wrap"><table class="t" style="font-size:14.5px">
+    <thead><tr><th>단계</th><th>핵심 내용</th></tr></thead>
+    <tbody>
+      <tr><td>1. 문제점과 개선 가능성의 인식</td><td>전략적으로 설정한 <b>경쟁우선순위</b>와 실제 확보한 <b>경쟁능력</b> 사이의 <span class="blank">불일치</span> → 문제 발생. 성과지표가 목표에 미달하는 프로세스에서 개선 기회 포착</td></tr>
+      <tr><td>2. 분석 대상의 범위 설정</td><td>소규모 ~ 조직 전반의 다단계 프로세스. 원인을 정확히 진단하려면 여러 프로세스를 포괄적으로 분석. <b>태스크포스</b> 구성, 외부 전문가 참여</td></tr>
+      <tr><td>3. 프로세스 문서화</td><td>업무 활동과 순서를 도표(표, 그래프, 다이어그램, 차트)로 자세하게 표현. 투입·산출, 공급자, 결과물의 이용자도 함께 정의</td></tr>
+      <tr><td>4. 프로세스 성과 평가</td><td>성과지표는 <b>경쟁우선순위 기준</b>, 구체적으로 <b>계량화</b>. 측정 결과를 토대로 평가</td></tr>
+      <tr><td>5. 프로세스 재설계</td><td>목표 성과와 실제 성과 사이의 <span class="blank">차이(gap)</span> 파악 → 원인 분석 → 개선안. 많은 원인은 관행적인 불필요한 업무와 비논리적 업무 방식. 아이디어별 개선 비용·효과 분석 후 선택, 문서로 작성</td></tr>
+      <tr><td>6. 재설계 프로세스의 적용</td><td><b>담당 직원의 적극적인 참여</b>가 가장 중요 + 최고경영자의 집행 의지. 기술·교육 투자와 시간이 들기 때문에 적용 기간 일정 관리 필요</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card" id="doc" data-toc="문서화 · 흐름도 · 공정도 기호">
+  <h2>3. 프로세스 문서화</h2>
+  <span class="slide-ref">p.7 – 8</span>
+  <ul>
+    <li>업무 활동과 순서를 <b>명시적으로</b> 문서화 — 글로 쓰면 분량이 많고 읽는 사람에 따라 오해 → 다양한 도구 개발</li>
+    <li><b>흐름도</b>: 엄격한 규칙 없음. 업무 활동은 사각형(□) 또는 원(◌), 흐름은 화살표(→)</li>
+  </ul>
+  <h3>1) 공정도 (Process Chart) 의 기호</h3>
+  <p><b>Frank Gilbreth</b>가 최초로 고안한 40개 기호를 <b>ASME</b>가 <span class="blank">5가지</span> 기호로 축소·표준화.</p>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>구분</th><th>기호</th><th>의미</th></tr></thead>
+    <tbody>
+      <tr><td>작업 (Operation)</td><td><svg width="30" height="26"><circle cx="15" cy="13" r="10" fill="none" stroke="#2b1a07" stroke-width="1.6"/></svg></td><td>작업 대상을 변화시키거나 창조하고 부가하는 <b>생산적인</b> 활동</td></tr>
+      <tr><td>검사 (Inspection)</td><td><svg width="30" height="26"><rect x="5" y="3" width="20" height="20" fill="none" stroke="#2b1a07" stroke-width="1.6"/></svg></td><td>작업 대상물을 확인하거나 품질 또는 수량을 조사</td></tr>
+      <tr><td>운반 (Transport)</td><td><svg width="30" height="26"><path d="M3 8H17V3L27 13L17 23V18H3Z" fill="none" stroke="#2b1a07" stroke-width="1.6"/></svg></td><td>작업 대상을 한 장소에서 다른 장소로 옮기는 활동</td></tr>
+      <tr><td>지체 (Delay)</td><td><svg width="30" height="26"><path d="M6 3H15A10 10 0 0 1 15 23H6Z" fill="none" stroke="#2b1a07" stroke-width="1.6"/></svg></td><td>작업 대상이 다음 작업을 <b>기다리는</b> 상황</td></tr>
+      <tr><td>저장 (Storage)</td><td><svg width="30" height="26"><path d="M4 4H26L15 23Z" fill="none" stroke="#2b1a07" stroke-width="1.6"/></svg></td><td>작업 대상물이 별도의 지시를 받기 전까지 현재 상태로 있는 상황</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><span class="hand">외우는 팁</span>부가가치를 만드는 건 <b>작업 ○</b> 하나뿐. 나머지 넷 (특히 운반·지체·저장) 이 줄여야 할 대상이에요.</div>
+</section>
+
+<section class="card" id="flowchart" data-toc="유통공정도 · 유통선도">
+  <h2>유통공정도 · 유통선도</h2>
+  <span class="slide-ref">p.9 – 10</span>
+  <div class="cols">
+    <div class="box"><h4><span class="blank">유통공정도</span> (Flow Process Chart)</h4>
+      <ul style="font-size:15px"><li>공정 중 발생하는 모든 <b>작업, 검사, 운반, 지체, 저장</b>을 도식화</li><li><b>소요시간, 운반 거리</b> 등 정보를 함께 기재</li><li>운반·지체·저장과 관련된 불필요한 <b>잠복비용</b>을 발견해 제거·감소하는 데 유용</li></ul></div>
+    <div class="box"><h4><span class="blank">유통선도</span> (Flow Diagram)</h4>
+      <ul style="font-size:15px"><li>기존 설비의 <b>배치도</b> 위에 작업 대상물이 이동하는 경로를 선으로 표시</li><li>운반거리 단축을 위한 재배치, 혼잡 지역 발견, <b>역류</b> 현상 점검</li><li>유통공정도가 활동의 <b>발생 위치</b>를 한눈에 보여주지 못하는 한계를 보완</li></ul></div>
+  </div>
+  <figure class="fig">
+    <svg viewBox="0 0 560 170" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <defs><marker id="f1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff6f1e"/></marker></defs>
+      <text x="10" y="18" fill="#2b1a07" font-weight="600">유통공정도 (표)</text>
+      <g font-size="11">
+        <text x="10" y="42">1 원지 보관</text><path d="M120 34H136L128 46Z" fill="none" stroke="#2b1a07"/><text x="150" y="42" fill="#6b5d4f">—</text>
+        <text x="10" y="66">2 재단기로 이동</text><path d="M118 58H130V54L138 62L130 70V66H118Z" fill="none" stroke="#2b1a07"/><text x="150" y="66" fill="#6b5d4f">15 m</text>
+        <text x="10" y="90">3 재단</text><circle cx="128" cy="86" r="7" fill="none" stroke="#2b1a07"/><text x="150" y="90" fill="#6b5d4f">120 s</text>
+        <text x="10" y="114">4 분류 대기</text><path d="M122 106H128A7 7 0 0 1 128 120H122Z" fill="none" stroke="#2b1a07"/><text x="150" y="114" fill="#6b5d4f">—</text>
+        <text x="10" y="138">5 수량 검사</text><rect x="121" y="131" width="14" height="14" fill="none" stroke="#2b1a07"/><text x="150" y="138" fill="#6b5d4f">30 s</text>
+      </g>
+      <text x="300" y="18" fill="#2b1a07" font-weight="600">유통선도 (배치도 위 경로)</text>
+      <rect x="300" y="28" width="250" height="132" rx="8" fill="#f7efe9" stroke="#e8ddd3"/>
+      <g fill="#fff" stroke="#a8a29e"><rect x="315" y="40" width="60" height="34" rx="4"/><rect x="470" y="40" width="64" height="34" rx="4"/><rect x="315" y="112" width="60" height="34" rx="4"/><rect x="470" y="112" width="64" height="34" rx="4"/></g>
+      <g text-anchor="middle" font-size="11"><text x="345" y="61">원지 창고</text><text x="502" y="61">재단기</text><text x="345" y="133">분류·합치기</text><text x="502" y="133">펀칭·바인딩</text></g>
+      <path d="M375 57H468" stroke="#ff6f1e" stroke-width="2" fill="none" marker-end="url(#f1)"/>
+      <path d="M490 74V95H360V110" stroke="#ff6f1e" stroke-width="2" fill="none" marker-end="url(#f1)"/>
+      <path d="M375 136H468" stroke="#d14343" stroke-width="2" fill="none" stroke-dasharray="4 3" marker-end="url(#f1)"/>
+      <text x="420" y="157" text-anchor="middle" fill="#d14343" font-size="10">긴 왕복·역류가 눈에 보임</text>
+    </svg>
+    <figcaption>(개념 그림) 표는 “무엇을 얼마나”, 배치도 위의 선은 “어디서 어디로”를 보여 줘요</figcaption>
+  </figure>
+</section>
+
+<section class="card" id="types" data-toc="5가지 프로세스 유형">
+  <h2>5. 기업의 프로세스 유형</h2>
+  <span class="slide-ref">p.11 – 16</span>
+  <p>고려사항: 필요한 자원의 종류, 자원의 배분 및 조직 방식, 자원의 특성. <b>제품의 흐름</b>을 기준으로 다섯 가지.</p>
+  <figure class="fig">
+    <svg viewBox="0 0 560 120" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#ffd2b8"/><stop offset="1" stop-color="#ce500a"/></linearGradient></defs>
+      <rect x="20" y="40" width="520" height="14" rx="7" fill="url(#tg)"/>
+      <g text-anchor="middle" fill="#2b1a07" font-weight="600"><text x="60" y="30">프로젝트</text><text x="170" y="30">개별작업(잡숍)</text><text x="280" y="30">배치</text><text x="390" y="30">라인</text><text x="500" y="30">연속 흐름</text></g>
+      <g text-anchor="middle" fill="#6b5d4f" font-size="11"><text x="60" y="74">선박·건설</text><text x="170" y="74">기계 부품</text><text x="280" y="74">가구·그릇</text><text x="390" y="74">자동차·냉장고</text><text x="500" y="74">석유·설탕·종이</text></g>
+      <text x="20" y="104" fill="#ce500a">← 고객화·다양성·유연성 높음</text><text x="540" y="104" text-anchor="end" fill="#ce500a">생산량·표준화·효율성 높음 →</text>
+    </svg>
+  </figure>
+  <div class="tbl-wrap"><table class="t" style="font-size:14.5px">
+    <thead><tr><th>유형</th><th>개념</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td><b>프로젝트</b></td><td>선박 건조, 항공기 제작, 시설물 건설 등 고객 요구에 맞춘 <b>일회성</b> 프로젝트</td><td>제품 규모가 커서 <b>제품 흐름이 없고</b> 작업자·자재가 제품 위치로 이동. 고객화가 매우 높아 자동화 어려움, 숙련 작업자 필요. 일정계획이 납기에 결정적 → 프로젝트 일정계획 기법</td></tr>
+      <tr><td><b>개별작업</b> (잡숍)</td><td>설비·작업자를 <b>공정별 배치</b>로 조직, 제품별로 처리 순서가 다름</td><td>높은 유연성 → 다양한 품목을 <b>소량</b> 생산, 수요 변화에 탄력적, 고가 제품에 유리. 규모의 경제 기대 어려움, 일정계획·통제가 까다로움</td></tr>
+      <tr><td><b>배치</b> (로트)</td><td>공정별 배치 + 제품을 <b>뱃치(로트)</b> 단위로 생산. 로트는 수백~수천 개</td><td>잡숍과 라인의 <b>중간 형태</b>. 잡숍보다 산출량이 많고 하위 품목을 미리 생산 가능, 제품 범위는 좁음. <b>혼류</b>(여러 제품이 동시에 여러 작업장에서 생산) → 재고 문제, 일정 어려움</td></tr>
+      <tr><td><b>라인</b></td><td>생산 과정이 순차적으로 흐름. <b>제품별 배치</b></td><td>매우 효율적이지만 제품 변경·수량 조절의 유연성 부족 (모델 변경에 몇 주). <b>많은 수량의 표준화 제품</b>. 운영은 단순하지만 <b>설계 단계에서 최적화</b>해야 함. 한 작업의 지연·정지가 전체에 영향</td></tr>
+      <tr><td><b>연속 흐름</b></td><td>액체·반고체 제품이 작업에서 작업으로 흘러가며 진행 (석유화학, 식품 — 장치산업)</td><td>이동하면서 가공 → <b>공간이용률이 매우 큼</b>. 한 곳 고장 = 전체 정지. 전용설비 대량생산 → 단위당 원가 매우 낮음. 유연성에 한계</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card" id="calendar" data-toc="사례 ① 달력 공장 97m → 61m">
+  <h2>6-1) 공정도의 적용 사례 — 달력 제작업체 X</h2>
+  <span class="slide-ref">p.17 – 18</span>
+  <ul>
+    <li>경기도의 달력 제작업체, 주요 생산품목 <b>삼각대 달력</b> (수익의 98%, 생산량의 96%). 성수기 40명, 비수기 20명</li>
+    <li>공정: 용지 재단 → 월별 분류 → 12개월 합치기 → 펀칭 → 용수철 바인딩 → 포장</li>
+  </ul>
+  <div class="cols">
+    <div class="box"><h4>성과 평가 (현재)</h4><p style="font-size:15px">이동거리 <b><span class="blank">97 m</span></b>, 지체를 제외한 이동시간 <b>2503.5 초</b></p></div>
+    <div class="box"><h4>재설계</h4><p style="font-size:15px">원인: 좌·우 작업 공간의 <b>높이 차이</b>에 따른 운반 애로 + <b>재단기의 위치</b>. 해결: 하역 보조장비 도입 + 재단기 재배치 → 이동거리 <b><span class="blank">61 m</span></b> (36 m 단축), 지게차 비용 감소</p></div>
+  </div>
+  <div class="note"><span class="hand">6단계에 대입</span>문서화(유통공정도) → 성과 평가(97 m, 2503.5 s) → 재설계(gap의 원인 = 높이 차이·재단기 위치) 순서 그대로예요.</div>
+</section>
+
+<section class="card" id="linebal" data-toc="사례 ② 조립 라인 재설계">
+  <h2>6-2) 조립 라인의 작업장 재설계 — 제품 Y</h2>
+  <span class="slide-ref">p.19 – 24</span>
+  <p>작업 A ~ J (원 = 작업, 숫자 = 작업소요시간 초, 화살표 = 직전 선행작업). 각 작업은 직전 선행작업이 완료되어야 시작.</p>
+  <figure class="fig">
+    <svg viewBox="0 0 560 222" font-family="Geist, Gowun Dodum, sans-serif" font-size="13">
+      <defs><marker id="lb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2b1a07"/></marker></defs>
+      <g stroke="#2b1a07" fill="none" marker-end="url(#lb)">
+      <line x1="58" y1="97" x2="130" y2="45"/>
+      <line x1="61" y1="104" x2="126" y2="87"/>
+      <line x1="61" y1="116" x2="126" y2="133"/>
+      <line x1="58" y1="123" x2="130" y2="177"/>
+      <line x1="172" y1="30" x2="245" y2="30"/>
+      <line x1="172" y1="80" x2="245" y2="80"/>
+      <line x1="172" y1="140" x2="245" y2="140"/>
+      <line x1="291" y1="36" x2="366" y2="56"/>
+      <line x1="292" y1="77" x2="365" y2="66"/>
+      <line x1="410" y1="70" x2="482" y2="100"/>
+      <line x1="292" y1="137" x2="480" y2="113"/>
+      <line x1="171" y1="187" x2="481" y2="116"/>
+      </g>
+      <circle cx="40" cy="110" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="40" y="109" text-anchor="middle" font-weight="600" fill="#ce500a">A</text><text x="40" y="123" text-anchor="middle" font-size="10.5" fill="#6b5d4f">120</text>
+      <circle cx="150" cy="30" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="150" y="29" text-anchor="middle" font-weight="600" fill="#ce500a">B</text><text x="150" y="43" text-anchor="middle" font-size="10.5" fill="#6b5d4f">100</text>
+      <circle cx="150" cy="80" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="150" y="79" text-anchor="middle" font-weight="600" fill="#ce500a">C</text><text x="150" y="93" text-anchor="middle" font-size="10.5" fill="#6b5d4f">50</text>
+      <circle cx="150" cy="140" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="150" y="139" text-anchor="middle" font-weight="600" fill="#ce500a">D</text><text x="150" y="153" text-anchor="middle" font-size="10.5" fill="#6b5d4f">90</text>
+      <circle cx="150" cy="192" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="150" y="191" text-anchor="middle" font-weight="600" fill="#ce500a">E</text><text x="150" y="205" text-anchor="middle" font-size="10.5" fill="#6b5d4f">30</text>
+      <circle cx="270" cy="30" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="270" y="29" text-anchor="middle" font-weight="600" fill="#ce500a">F</text><text x="270" y="43" text-anchor="middle" font-size="10.5" fill="#6b5d4f">20</text>
+      <circle cx="270" cy="80" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="270" y="79" text-anchor="middle" font-weight="600" fill="#ce500a">G</text><text x="270" y="93" text-anchor="middle" font-size="10.5" fill="#6b5d4f">40</text>
+      <circle cx="270" cy="140" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="270" y="139" text-anchor="middle" font-weight="600" fill="#ce500a">H</text><text x="270" y="153" text-anchor="middle" font-size="10.5" fill="#6b5d4f">60</text>
+      <circle cx="390" cy="62" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="390" y="61" text-anchor="middle" font-weight="600" fill="#ce500a">I</text><text x="390" y="75" text-anchor="middle" font-size="10.5" fill="#6b5d4f">80</text>
+      <circle cx="505" cy="110" r="22" fill="#fff" stroke="#ff6f1e" stroke-width="1.8"/><text x="505" y="109" text-anchor="middle" font-weight="600" fill="#ce500a">J</text><text x="505" y="123" text-anchor="middle" font-size="10.5" fill="#6b5d4f">60</text>
+      </svg>
+    <figcaption>A→B,C,D,E · B→F · C→G · D→H · F,G→I · H,I,E→J · 합계 650초</figcaption>
+  </figure>
+  <h3>(1) 현재 배치의 최대 산출률과 효율</h3>
+  <p>작업장: A | B,C | D,E | F,G | H,I | J → 가장 긴 작업장 = 작업장 2 (150초)</p>
+  <div class="eq">\[\text{주기시간} = 150\text{초/개},\quad \text{최대 산출률} = \frac{3600}{150} = 24\text{개/시간}\]</div>
+  <div class="eq">\[\text{유휴시간} = 6\times150 - 650 = 250\text{초},\qquad \text{효율} = \frac{650}{6\times150}\times100 = 72.2\%\]</div>
+  <div class="label"><span class="tag">공식</span><p>효율 = <span class="blank">작업시간의 합 / (작업장 수 × 주기시간)</span>, 유휴시간 = 작업장 수 × 주기시간 − 작업시간의 합</p></div>
+  <h3>(2) 재설계 대안</h3>
+  <div class="cols">
+    <div class="box"><h4>[대안 1] <span class="blank">최장 작업시간</span> 배정</h4>
+      <p style="font-size:15px">이론적 최소 주기시간 = 650/6 = <b>108.3초</b>, 작업시간을 감안해 목표 <b>120초</b>. 후보 중 작업시간이 가장 긴 작업부터 배정 (동률이면 임의).</p>
+      <p style="font-size:15px">A | B,F | D,E | C,H | G,I | J</p></div>
+    <div class="box"><h4>[대안 2] <span class="blank">최대 후행 작업수</span> 배정</h4>
+      <p style="font-size:15px">목표 = 현재 주기시간 <b>150초</b>. 후보 중 후행 작업 수가 가장 많은 작업부터 (동률이면 작업시간이 큰 작업).</p>
+      <p style="font-size:15px">A | B,C | D,G | F,I | H,E,J</p></div>
+  </div>
+  <div class="note warn"><span class="hand">슬라이드 “다른 대안” 체크</span>대안 1의 다른 대안 (A; B,F; D,E; I,G; H,J; C) 은 <b>C 가 G 보다 뒤</b>에 와서 선행관계 (C → G) 를 어겨요. 대안 2의 다른 대안 (A; B,C; D,G,F; I,H; E,J) 은 가능해요. 아래 위젯에서 직접 확인해 보세요.</div>
+  <h3>(3) 최적 대안 선택</h3>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th></th><th>주기시간</th><th>최대 산출률</th><th>작업장 수</th><th>유휴시간</th><th>효율</th></tr></thead>
+    <tbody>
+      <tr><td>현재</td><td>150</td><td>24/h</td><td>6</td><td>250</td><td>72.2%</td></tr>
+      <tr><td>대안 1</td><td>120</td><td><b>30/h</b></td><td>6</td><td>6×120−650 = 70</td><td><b>90.3%</b></td></tr>
+      <tr><td>대안 2</td><td>150</td><td>24/h</td><td><b>5</b></td><td>5×150−650 = 100</td><td>86.7%</td></tr>
+    </tbody>
+  </table></div>
+  <p>작업장 수를 고려하지 않으면 <b>대안 1</b> 이 최적 (산출률·효율 모두 큼). 평가지표가 <b>작업장 수</b>라면 <b>대안 2</b>.</p>
+  <div data-widget="linebal"></div>
+</section>
+
+<h2 class="part-title"><small>part 2</small>프로세스 선택</h2>
+
+<section class="card" id="select" data-toc="프로세스 선택 · 처리비율">
+  <h2>프로세스 선택</h2>
+  <span class="slide-ref">process p.1 – 4</span>
+  <ul>
+    <li>제품이나 서비스를 생산하는 생산 프로세스의 <b>유형 결정</b> (예: 자동차 – 와인 – 맞춤 양복)</li>
+    <li>주요 고려 요소: <b>생산량, 표준화/고객화</b> 등</li>
+    <li><b>전략적 의사결정</b>: 자본집약적, 변경 어려움, 장기적 관점 → 생산·마케팅·재무 등 기능 간 긴밀한 조정 필요</li>
+    <li>명칭 대응: 잡숍 = 개별작업, 조립라인 = 라인, 연속 = 연속흐름</li>
+  </ul>
+  <div class="tbl-wrap"><table class="t" style="font-size:14.5px">
+    <thead><tr><th>유형</th><th>예</th><th>특징</th></tr></thead>
+    <tbody>
+      <tr><td>프로젝트</td><td>빌딩, 댐, 교량, 고속도로, 비행기, 선박, 영화, 예술품</td><td>자재 흐름 없음, 과업들이 선행관계로 연결. 낮은 자동화, 범용설비. 계획·일정관리 어려움</td></tr>
+      <tr><td>잡숍</td><td>기계 부품, 기자재</td><td>고객 주문에 따라 소량 생산 (뱃치 프로세스의 특수 형태)</td></tr>
+      <tr><td>뱃치</td><td>가구, 보트, 그릇</td><td>다양한 제품을 소규모 뱃치/로트로. 프로세스별 배치 → 흐름이 혼잡하며 <b>단속적</b></td></tr>
+      <tr><td>조립라인</td><td>자동차, 냉장고, 컴퓨터</td><td>직선적 흐름 (컨베이어). 제품별 배치, 반복적 대량생산. 낮은 유연성, 높은 효율성</td></tr>
+      <tr><td>연속</td><td>설탕, 종이, 석유 (장치 산업)</td><td>높은 표준화, 대량. 대부분 일용상품 → 차별화 어렵고 가격에 민감. 주문획득요인: <b>낮은 원가</b></td></tr>
+    </tbody>
+  </table></div>
+  <h3>생산 프로세스의 효율성</h3>
+  <div class="eq">\[\text{처리비율} = \frac{\text{총처리시간}}{\text{총생산시간}} \times 100\%\]</div>
+  <p>잡숍 및 뱃치 <b><span class="blank">10 ~ 20%</span></b> &nbsp;≪&nbsp; 조립 및 연속 <b><span class="blank">90 ~ 100%</span></b> — 잡숍은 대부분의 시간을 기다리거나 이동하는 데 써요.</p>
+</section>
+
+<section class="card" id="table41" data-toc="표 4-1 프로세스의 특징">
+  <h2>표 4-1 프로세스의 특징</h2>
+  <span class="slide-ref">process p.5</span>
+  <div class="tbl-wrap"><table class="t" style="font-size:14px">
+    <thead><tr><th>특징</th><th>연속 및 조립라인</th><th>배치 및 잡숍</th><th>프로젝트</th></tr></thead>
+    <tbody>
+      <tr><td colspan="4"><b>제품</b></td></tr>
+      <tr><td>주문유형</td><td>연속 또는 큰 뱃치</td><td>소규모 뱃치</td><td>단일 단위</td></tr>
+      <tr><td>제품흐름</td><td>순차적</td><td>혼잡</td><td>없음</td></tr>
+      <tr><td>제품의 다양성</td><td>낮음</td><td>높음</td><td>매우 높음</td></tr>
+      <tr><td>시장형태</td><td>대량</td><td>고객 주문</td><td>유일</td></tr>
+      <tr><td>수량</td><td>많음</td><td>중 · 소량</td><td>단일 단위</td></tr>
+      <tr><td colspan="4"><b>노동인력</b></td></tr>
+      <tr><td>기술</td><td>낮음</td><td>높음</td><td>높음</td></tr>
+      <tr><td>과업형태</td><td>반복적</td><td>비반복적</td><td>비반복적</td></tr>
+      <tr><td>보수</td><td>중간</td><td>높음</td><td>높음</td></tr>
+      <tr><td colspan="4"><b>자본</b></td></tr>
+      <tr><td>투자</td><td>높음</td><td>중간</td><td>중간</td></tr>
+      <tr><td>재고</td><td>낮음</td><td>높음</td><td>거의 없음</td></tr>
+      <tr><td>장비</td><td>전용</td><td>범용</td><td>범용</td></tr>
+      <tr><td colspan="4"><b>생산목표</b></td></tr>
+      <tr><td>원가</td><td>낮음</td><td>중간</td><td>높음</td></tr>
+      <tr><td>품질</td><td>적합품질</td><td>적합품질</td><td>적합품질</td></tr>
+      <tr><td>납품</td><td>정시</td><td>정시</td><td>정시</td></tr>
+      <tr><td>유연성</td><td>낮음</td><td>중간</td><td>높음</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card" id="ppm" data-toc="제품-프로세스 행렬">
+  <h2>제품-프로세스 전략 — 제품-프로세스 행렬</h2>
+  <span class="slide-ref">process p.11 – 12</span>
+  <ul><li>제품과 프로세스 선택의 <b>동적인 성격</b> · 제품과 프로세스의 <b>진화 과정</b> · 기업의 <b>위치(positioning) 전략</b></li></ul>
+  <figure class="fig">
+    <svg viewBox="0 0 560 330" font-family="Geist, Gowun Dodum, sans-serif" font-size="11.5">
+      <defs><marker id="pp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2b1a07"/></marker></defs>
+      <text x="330" y="10" text-anchor="middle" fill="#6b5d4f" font-size="10.5">제품 구조 (제품 수명주기의 단계) →</text>
+      <g text-anchor="middle" fill="#2b1a07"><text x="160" y="28">유일,<tspan x="160" dy="13">독특한</tspan></text><text x="240" y="28">소량, 낮은<tspan x="240" dy="13">표준화</tspan></text><text x="320" y="28">다품종<tspan x="320" dy="13">소량</tspan></text><text x="400" y="28">소수 주요<tspan x="400" dy="13">품목 대량</tspan></text><text x="490" y="28">대량, 높은<tspan x="490" dy="13">표준화</tspan></text></g>
+      <g text-anchor="end" fill="#2b1a07"><text x="112" y="76">프로젝트</text><text x="112" y="132">잡숍</text><text x="112" y="188">뱃치</text><text x="112" y="244">조립라인</text><text x="112" y="300">연속</text></g>
+      <rect x="120" y="46" width="420" height="280" fill="#fff" stroke="#e8ddd3"/>
+      <path d="M440 46H540V130Z" fill="#e8ddd3"/><text x="510" y="70" text-anchor="middle" fill="#6b5d4f">없음</text>
+      <path d="M120 240V326H220Z" fill="#e8ddd3"/><text x="148" y="314" fill="#6b5d4f">없음</text>
+      <path d="M160 72L240 128L320 184L400 240L490 300" stroke="#a8a29e" stroke-dasharray="4 3" fill="none"/>
+      <g fill="#fff0e6" stroke="#ff6f1e"><circle cx="160" cy="72" r="22"/><circle cx="240" cy="128" r="22"/><circle cx="320" cy="184" r="22"/><circle cx="400" cy="240" r="22"/><circle cx="490" cy="300" r="22"/></g>
+      <g text-anchor="middle" fill="#ce500a"><text x="160" y="76">빌딩</text><text x="240" y="132">인쇄업</text><text x="320" y="188">중장비</text><text x="400" y="237">자동차</text><text x="400" y="251">조립</text><text x="490" y="304">제당</text></g>
+      <line x1="350" y1="184" x2="400" y2="184" stroke="#2b1a07" stroke-width="2.2" marker-end="url(#pp)"/>
+      <line x1="320" y1="210" x2="320" y2="270" stroke="#2b1a07" stroke-width="2.2" marker-end="url(#pp)"/>
+      <text x="14" y="190" fill="#6b5d4f" transform="rotate(-90 14 190)" text-anchor="middle">프로세스 구조 (수명주기 단계) ↓</text>
+    </svg>
+    <figcaption>대각선 = 제품과 프로세스가 맞는 위치. 화살표처럼 수평(제품 먼저) 또는 수직(프로세스 먼저)으로 번갈아 벗어나며 이동</figcaption>
+  </figure>
+  <ul>
+    <li>기업들은 보통 행렬의 <b><span class="blank">대각선</span></b> 상에 위치</li>
+    <li>제품과 프로세스가 <b>동시에</b> 변화하는 경우는 드물며, 대각선을 <b>수직적 또는 수평적으로 번갈아</b> 벗어나면서 변화</li>
+    <li>같은 산업의 기업이라도 위치가 다름: 유연성과 품질 강조 → <b>왼쪽 상단</b>, 낮은 원가의 표준화 제품 → 대각선 따라 <b>아래로</b></li>
+    <li>최적 제품-프로세스 전략은 그 기업의 <b>차별적 능력</b>이나 경쟁수단에 따라 선택</li>
+  </ul>
+</section>
+
+<h2 class="part-title"><small>part 3</small>설비배치</h2>
+
+<section class="card" id="layout" data-toc="설비배치의 유형">
+  <h2>설비배치의 유형</h2>
+  <span class="slide-ref">layout p.9 – 12</span>
+  <p><b>설비배치</b>: 프로세스 흐름에 맞도록 공장·서비스 시설의 부서 위치, 설비 배열 등을 결정. 작업 흐름 유형 기준으로 <b>고정위치, 공정별, 제품별</b> (3가지 기본 유형) + 셀룰러, 혼합형.</p>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>배치</th><th>↔ 공정 유형</th></tr></thead>
+    <tbody><tr><td>공정별 배치</td><td>배치 및 잡숍 공정</td></tr><tr><td>제품별 배치</td><td>연속 및 조립라인 공정</td></tr><tr><td>프로젝트 배치</td><td>프로젝트 공정</td></tr></tbody>
+  </table></div>
+  <figure class="fig">
+    <svg viewBox="0 0 560 190" font-family="Geist, Gowun Dodum, sans-serif" font-size="11">
+      <defs><marker id="ly" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff6f1e"/></marker></defs>
+      <text x="90" y="16" text-anchor="middle" font-weight="600" font-size="12">공정별 배치</text>
+      <g fill="#f7efe9" stroke="#a8a29e"><rect x="10" y="26" width="70" height="60" rx="6"/><rect x="100" y="26" width="70" height="60" rx="6"/><rect x="10" y="104" width="70" height="60" rx="6"/><rect x="100" y="104" width="70" height="60" rx="6"/></g>
+      <g text-anchor="middle"><text x="45" y="60">선반 L L</text><text x="135" y="60">밀링 M M</text><text x="45" y="138">드릴 D D</text><text x="135" y="138">연삭 G G</text></g>
+      <path d="M45 86C60 100 110 70 125 86" stroke="#ff6f1e" fill="none" marker-end="url(#ly)"/><path d="M125 100C110 115 60 100 50 104" stroke="#ff6f1e" fill="none" marker-end="url(#ly)"/><path d="M80 140C95 160 110 150 110 140" stroke="#d14343" fill="none" marker-end="url(#ly)"/>
+      <text x="90" y="182" text-anchor="middle" fill="#6b5d4f">흐름이 복잡, 제품마다 경로 다름</text>
+      <text x="290" y="16" text-anchor="middle" font-weight="600" font-size="12">제품별 배치</text>
+      <g fill="#f7efe9" stroke="#a8a29e"><rect x="200" y="70" width="38" height="34" rx="5"/><rect x="250" y="70" width="38" height="34" rx="5"/><rect x="300" y="70" width="38" height="34" rx="5"/><rect x="350" y="70" width="38" height="34" rx="5"/></g>
+      <g text-anchor="middle"><text x="219" y="91">L</text><text x="269" y="91">M</text><text x="319" y="91">D</text><text x="369" y="91">G</text></g>
+      <line x1="200" y1="120" x2="388" y2="120" stroke="#ff6f1e" stroke-width="2" marker-end="url(#ly)"/>
+      <text x="294" y="182" text-anchor="middle" fill="#6b5d4f">작업순서대로 일직선</text>
+      <text x="480" y="16" text-anchor="middle" font-weight="600" font-size="12">고정위치 배치</text>
+      <ellipse cx="480" cy="96" rx="44" ry="26" fill="#fff0e6" stroke="#ff6f1e"/><text x="480" y="100" text-anchor="middle" fill="#ce500a">선박</text>
+      <g fill="#fff" stroke="#a8a29e"><circle cx="420" cy="40" r="14"/><circle cx="540" cy="40" r="14"/><circle cx="420" cy="155" r="14"/><circle cx="540" cy="155" r="14"/></g>
+      <g text-anchor="middle" font-size="10"><text x="420" y="44">자재</text><text x="540" y="44">공구</text><text x="420" y="159">장비</text><text x="540" y="159">사람</text></g>
+      <g stroke="#ff6f1e" marker-end="url(#ly)"><line x1="430" y1="50" x2="452" y2="74"/><line x1="530" y1="50" x2="508" y2="74"/><line x1="430" y1="145" x2="452" y2="118"/><line x1="530" y1="145" x2="508" y2="118"/></g>
+      <text x="480" y="182" text-anchor="middle" fill="#6b5d4f">자원이 제품으로 이동</text>
+    </svg>
+  </figure>
+  <div class="tbl-wrap"><table class="t" style="font-size:14.5px">
+    <thead><tr><th></th><th><span class="blank">공정별 배치</span></th><th><span class="blank">제품별 배치</span></th><th><span class="blank">고정위치 배치</span></th></tr></thead>
+    <tbody>
+      <tr><td>방식</td><td>유사한 기계설비나 기능을 한 작업장·부서에 모음</td><td>제품별로 작업순서에 따라 설비·작업장 배치</td><td>제품은 한 장소에 고정, 자재·공구·장비·작업자가 이동</td></tr>
+      <tr><td>흐름</td><td>복잡 (제품마다 필요한 부서를 거침)</td><td>직선적이거나 미리 정해진 패턴, 각 작업장은 고도로 전문화된 하나의 작업</td><td>— (크기·무게로 이동 곤란)</td></tr>
+      <tr><td>적합</td><td>다품종 소량 (배치, 잡숍)</td><td>연속적·반복적 대량생산 (연속, 조립라인)</td><td>프로젝트 공정</td></tr>
+      <tr><td>예</td><td>기계 주문 제작, 병원, 대학</td><td>자동차 조립라인, 전자제품 생산라인, 카페테리아</td><td>조선, 비행기 제작, 건설공사</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card" id="cell" data-toc="셀룰러 배치 · GT">
+  <h2><span class="blank">셀룰러 배치</span> (Cellular Layout)</h2>
+  <span class="slide-ref">layout p.13 – 16</span>
+  <ul>
+    <li><b>제조 셀</b>: 비슷한 모양과 가공 요건을 가진 품목들의 생산에 필요한 <b>서로 다른 기계들</b>을 가공 진행 순서에 따라 모아 놓은 것 → 셀룰러 제조</li>
+    <li>장점: 기계 간 이동거리·대기시간이 짧음 → <b>생산소요시간 단축, 재공품 재고 감소</b></li>
+    <li>다양한 품목의 <b>중소량</b> 생산에 적합 — 제품별 배치와 유사한 이점</li>
+    <li>대표적 형태: <b>그룹 테크놀로지 (GT)</b> 배치 — 비슷한 특성의 부품끼리 <b>부품군</b>으로 분류, 그 유사성을 생산·설계에 이용. 부품군 생산에 필요한 기계들을 모아 제조셀로 구성</li>
+  </ul>
+  <figure class="fig">
+    <svg viewBox="0 0 560 150" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <defs><marker id="cl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ff6f1e"/></marker></defs>
+      <g><rect x="20" y="20" width="240" height="56" rx="10" fill="#fff0e6" stroke="#ff6f1e"/><text x="30" y="16" fill="#ce500a" font-family="Gowun Dodum">셀 1 — 부품군 ①</text>
+        <g fill="#fff" stroke="#a8a29e"><rect x="40" y="32" width="40" height="32" rx="5"/><rect x="100" y="32" width="40" height="32" rx="5"/><rect x="160" y="32" width="40" height="32" rx="5"/></g>
+        <g text-anchor="middle"><text x="60" y="53">L</text><text x="120" y="53">M</text><text x="180" y="53">D</text></g>
+        <g stroke="#ff6f1e" marker-end="url(#cl)"><line x1="80" y1="48" x2="98" y2="48"/><line x1="140" y1="48" x2="158" y2="48"/><line x1="200" y1="48" x2="240" y2="48"/></g></g>
+      <g><rect x="20" y="90" width="240" height="56" rx="10" fill="#fff0e6" stroke="#ff6f1e"/><text x="30" y="142" fill="#ce500a" font-family="Gowun Dodum" font-size="10">셀 2 — 부품군 ②</text>
+        <g fill="#fff" stroke="#a8a29e"><rect x="40" y="98" width="40" height="32" rx="5"/><rect x="100" y="98" width="40" height="32" rx="5"/><rect x="160" y="98" width="40" height="32" rx="5"/></g>
+        <g text-anchor="middle"><text x="60" y="119">L</text><text x="120" y="119">G</text><text x="180" y="119">D</text></g>
+        <g stroke="#ff6f1e" marker-end="url(#cl)"><line x1="80" y1="114" x2="98" y2="114"/><line x1="140" y1="114" x2="158" y2="114"/><line x1="200" y1="114" x2="240" y2="114"/></g></g>
+      <g font-family="Gowun Dodum" font-size="12.5" fill="#2b1a07">
+        <text x="290" y="34"><tspan font-weight="600">단계 1</tspan> 공통 가공 순서를 가진 부품군으로 그룹화 (GT)</text>
+        <text x="290" y="78"><tspan font-weight="600">단계 2</tspan> 부품군들의 주된 흐름 패턴 파악</text>
+        <text x="290" y="122"><tspan font-weight="600">단계 3</tspan> 기계·공정을 물리적으로 셀로 그룹화</text>
+      </g>
+    </svg>
+    <figcaption>공정별 배치 → 셀룰러 배치 전환의 3단계</figcaption>
+  </figure>
+  <h3>셀룰러 배치의 조립라인공정에의 도입</h3>
+  <ul><li>최근 조립라인공정에도 도입 — <b>소품종 대량생산 → 다품종 대량생산</b>체제로 전환하기 위함</li><li>1~2명의 작업자가 모든 공정을 소화 → <b>다기능 숙련공</b> 육성 필요</li></ul>
+</section>
+
+<section class="card" id="sum04" data-toc="요약">
+  <h2>요약</h2>
+  <span class="slide-ref">p.25</span>
+  <div class="cols">
+    <div class="box"><h4>프로세스 문서화</h4><p style="font-size:15px">흐름도 · 공정도 · 유통공정도 · 유통선도 · 서비스 블루프린트 · 비즈니스 프로세스 다이어그램</p></div>
+    <div class="box"><h4>기업의 프로세스 유형</h4><p style="font-size:15px">프로젝트 · 개별작업 · 배치 · 라인 · 연속 흐름</p></div>
+  </div>
+</section>
+
+<section class="card tint" id="quiz04" data-toc="셀프 체크">
+  <h2>Self-check</h2>
+  <details class="quiz"><summary>ASME 공정도 기호 5가지와 그중 부가가치 활동은?</summary><div class="ans">작업 ○, 검사 □, 운반 ⇨, 지체 D, 저장 ▽. 부가가치 = 작업.</div></details>
+  <details class="quiz"><summary>유통선도가 유통공정도의 어떤 한계를 보완하나?</summary><div class="ans">활동이 생산현장의 어디서 발생하는지(위치)를 한눈에 보여주지 못하는 한계.</div></details>
+  <details class="quiz"><summary>작업장 6개, 주기시간 120초, 작업시간 합 650초일 때 효율과 시간당 산출률은?</summary><div class="ans">650/720 = 90.3%, 3600/120 = 30개/시간.</div></details>
+  <details class="quiz"><summary>잡숍과 조립라인의 처리비율은 대략?</summary><div class="ans">잡숍·뱃치 10~20%, 조립·연속 90~100%.</div></details>
+  <details class="quiz"><summary>기업이 제품-프로세스 행렬의 왼쪽 위에 위치하면 무엇을 강조하는 것?</summary><div class="ans">유연성과 품질. 아래로 갈수록 낮은 원가의 표준화 제품.</div></details>
+  <details class="quiz"><summary>공정별 배치 → 셀룰러 배치 전환 3단계는?</summary><div class="ans">① GT로 부품군 그룹화 ② 주된 흐름 패턴 파악 ③ 기계·공정을 물리적으로 셀로 그룹화.</div></details>
+  <div class="quiz-cta"><div class="qc-text"><span class="hand">다 풀어 봤으면?</span><b>04장 퀴즈</b><span>바로 채점하고 틀린 건 오답노트에 모아 줘요.</span></div><div class="qc-btns"><a class="pill primary" href="quiz.html?ch=04">04장 퀴즈 풀기 →</a><a class="pill small" href="quiz.html?ch=all">전체 퀴즈</a></div></div>
+</section>
+
+<nav class="ch-nav"></nav>
+    </main>
+  </div>
+</div>
+</body>
+</html>

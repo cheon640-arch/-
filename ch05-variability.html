@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05. 프로세스 변동성 — om notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Gaegu:wght@400;700&family=Geist:wght@400;500&family=Gowun+Dodum&family=JetBrains+Mono&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script defer src="assets/app.js"></script>
+<script defer src="assets/om-widgets.js"></script>
+<script defer src="assets/notes.js"></script>
+</head>
+<body data-ch="05">
+
+<div class="wrap">
+  <div class="hero">
+    <span class="kicker">5장 · 프로세스 변동성</span>
+    <h1 class="display">why is there<br>a line?</h1>
+    <p class="lede">공급능력이 충분해도 <span class="mk">변동성 때문에 줄이 생겨요</span>. 변동성의 4가지 원인, 변동계수, 지수분포, 대기시간 공식 (킹맨), 리틀의 법칙, 풀링, 산출 손실까지.</p>
+    <div class="meta">원본: OM_Chap05.student.pdf</div>
+    <div data-sticker="route" data-rot="8" style="right:8%;top:80px;width:72px;height:72px"></div>
+    <div data-sticker="pin" data-rot="-10" style="right:20%;top:200px;width:56px;height:56px"></div>
+  </div>
+
+  <div class="page-grid">
+    <aside class="toc"></aside>
+    <main class="lesson">
+
+<h2 class="part-title"><small>5.1</small>서론</h2>
+
+<section class="card" id="intro" data-toc="대기는 왜 생기나">
+  <h2>서론 — 대기는 왜 생기나</h2>
+  <span class="slide-ref">p.2</span>
+  <ul>
+    <li><span class="blank">변동성</span>으로 인해 나타나는 결과 중 하나는 <span class="blank">대기 (대기행렬)</span> 문제 — 고객 입장에서는 불편함</li>
+    <li>대기 시간은 보통 한정된 시간 동안 <b>예측된 수요량이 예측된 공급량을 넘어설 때</b> 발생 (수요가 계절적이고 공급 수준이 일정할 때)</li>
+    <li>변동성 때문에 활용률이 <span class="blank">100%</span>가 되지 않더라도 대기행렬이 생길 수 있음 — 충분한 공급 능력이 있어도</li>
+    <li>대기시간의 원인이 <b>공급능력</b>이냐 <b>변동성</b>이냐를 파악하는 것이 운영관리자에게 중요</li>
+    <li>목표는 변동성을 <b>완전히 없애는 것이 아니라</b>, 변동성이 만드는 대기·손실 비용을 감당 가능한 수준으로 줄이는 것</li>
+  </ul>
+</section>
+
+<h2 class="part-title"><small>5.2</small>변동성과 프로세스</h2>
+
+<section class="card" id="sources" data-toc="변동성의 4가지 원인 · CV">
+  <h2>변동성의 원인과 측정 방법</h2>
+  <span class="slide-ref">p.3</span>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>원인</th><th>설명</th><th>버스 비유</th></tr></thead>
+    <tbody>
+      <tr><td>① <span class="blank">입력 (도착, 수요)</span>으로 인한 변동성</td><td>가장 영향력 있는 원인은 <b>시장</b></td><td>버스가 늦게 와서</td></tr>
+      <tr><td>② <span class="blank">작업 (처리) 시간</span>의 변동성</td><td>기계가 아닌 <b>사람</b>이 작업하기 때문</td><td>버스가 도중에 막혀서</td></tr>
+      <tr><td>③ <span class="blank">자원</span>의 무작위적 가용성</td><td>제조 상황에서 자원을 쓸 수 없게 될 때</td><td>버스가 고장이 나서</td></tr>
+      <tr><td>④ 복수의 흐름 단위가 존재하는 <span class="blank">프로세스 (흐름단위 경로)</span>의 무작위적 경로 결정</td><td>각 작업의 도착 프로세스가 영향을 받음</td><td>다른 버스를 타서</td></tr>
+    </tbody>
+  </table></div>
+  <p>변동성은 <b>상대적으로</b> 판단하는 것이 낫다 → <b>변동계수 (coefficient of variation)</b></p>
+  <div class="eq">\[CV = \frac{\text{표준편차}}{\text{평균}}\]</div>
+  <div class="note"><span class="hand">왜 상대적?</span>표준편차 2분은 평균 4분짜리 상담엔 크지만 평균 2시간짜리 수술엔 작아요. 평균으로 나누면 비교가 가능해져요.</div>
+</section>
+
+<section class="card" id="arrival" data-toc="도착 프로세스 · 지수분포">
+  <h2>도착 프로세스 · 지수 분포 기반의 도착 간격</h2>
+  <span class="slide-ref">p.4 – 5</span>
+  <ul>
+    <li>분석의 품질은 사용하는 정보에 의해 결정 → <b>수요를 정확하게</b> 제시해야 함. 도착시간·도착간격을 기록 후 계산</li>
+    <li>모델 예측력 향상을 위한 2가지 질문: 도착 프로세스가 <b>고정적(stationary)</b>인가? <b>포아송 프로세스</b>를 형성하는가?</li>
+  </ul>
+  <p>도착 간격이 무작위이고 지수 분포를 따르면 (a = 평균 도착 간격):</p>
+  <div class="eq">\[P(T \le t) = 1 - e^{-t/a}\]</div>
+  <ul>
+    <li>도착 간격이 지수분포 → <b>포아송 프로세스</b> 활용 가능</li>
+    <li>지수 분포의 표준 편차 값은 <span class="blank">평균</span>과 같다</li>
+    <li>지수 분포는 <span class="blank">무기억성 (memoryless)</span>이다 — 다음 시간 간격 동안의 도착 수는 최근의 도착 시간과 상관이 없음</li>
+  </ul>
+  <div class="eq">\[P(T>t+s \mid T>t) = \frac{P(T>t+s)}{P(T>t)} = \frac{e^{-(t+s)/a}}{e^{-t/a}} = e^{-s/a} = P(T>s)\]</div>
+  <ul><li>평균 = 표준편차 → 변동계수는 <span class="blank">1</span> : \(CV_a = \dfrac{\text{도착 간격의 표준편차}}{\text{평균 도착 간격}} = 1\)</li></ul>
+  <figure class="fig">
+    <svg viewBox="0 0 480 200" font-family="Geist, Gowun Dodum, sans-serif" font-size="12" id="expfig">
+      <line x1="40" y1="170" x2="460" y2="170" stroke="#2b1a07"/><line x1="40" y1="170" x2="40" y2="15" stroke="#2b1a07"/>
+      <g fill="#6b5d4f" text-anchor="end"><text x="34" y="174">0</text><text x="34" y="34">1</text></g>
+      <line x1="40" y1="30" x2="460" y2="30" stroke="#e8ddd3" stroke-dasharray="3 3"/>
+      <path id="expcdf" fill="none" stroke="#ff6f1e" stroke-width="2.4"/>
+      <line x1="124" y1="170" x2="124" y2="81.5" stroke="#a8a29e" stroke-dasharray="3 3"/><circle cx="124" cy="81.5" r="4" fill="#ce500a"/>
+      <text x="130" y="76" fill="#ce500a">t = a 에서 1 − e⁻¹ ≈ 0.632</text>
+      <g fill="#6b5d4f" text-anchor="middle"><text x="124" y="188">a</text><text x="208" y="188">2a</text><text x="292" y="188">3a</text><text x="376" y="188">4a</text></g>
+      <text x="455" y="160" text-anchor="end" fill="#6b5d4f">t</text>
+    </svg>
+    <figcaption>P(T ≤ t) = 1 − e^(−t/a): 평균 간격 안에 다음 도착이 올 확률은 약 63%</figcaption>
+  </figure>
+  <script>(function(){var d='';for(var i=0;i<=84;i++){var x=i*5,t=x/84;d+=(i?'L':'M')+(40+x)+' '+(170-140*(1-Math.exp(-t))).toFixed(1);}document.getElementById('expcdf').setAttribute('d',d);})();</script>
+</section>
+
+<section class="card" id="callcenter" data-toc="콜센터의 문제점 (u = 80%)">
+  <h2>콜센터의 문제점</h2>
+  <span class="slide-ref">p.6</span>
+  <p>통화당 평균 <b>p = 4분</b>, 평균 <b>a = 5분</b>마다 전화 1통, 직원 1명. 평균만 보면 대기는 전혀 없어야 한다?</p>
+  <ul>
+    <li>처리 능력: 60/4 = <b>15 통/시간</b>, 실제 수요: 60/5 = <b>12 통/시간</b></li>
+  </ul>
+  <div class="eq">\[\text{활용률}(u) = \frac{\text{수요율}}{\text{공급능력}} = \frac{12\text{통/시간}}{15\text{통/시간}} = 80\%\]</div>
+  <ul>
+    <li>공급 능력이 수요를 초과 → 그런데도 <b>고객의 전화가 일정하게 걸려오지 않기 때문에</b> 대기가 생김</li>
+    <li>매니저가 관심 가져야 할 세 가지 성과 측정치: <b>재고 (I), 흐름율 (R), 체류시간 또는 흐름시간 (T)</b></li>
+  </ul>
+  <div data-widget="queuesim"></div>
+</section>
+
+<section class="card" id="kingman" data-toc="대기시간 공식 · 3가지 요인">
+  <h2>서비스 시간의 변동성과 평균대기시간의 예측</h2>
+  <span class="slide-ref">p.7 – 8</span>
+  <ul>
+    <li>서비스 시간의 분포를 모델화하지 않고, <b>평균과 표준편차</b>가 필요한 정보를 제공한다고 가정</li>
+    <li>공급능력 &gt; 수요, 모든 고객 수용 → <b>수요제약 시스템</b>, 흐름율 R = 수요율</li>
+  </ul>
+  <div class="eq">\[\text{자원활용률}(u) = \frac{\text{흐름율}}{\text{공급능력}} = \frac{1/a}{1/p} = \frac{p}{a} \;<\; 100\%\]</div>
+  <div class="eq">\[T = T_q + p\]</div>
+  <div class="eq">\[T_q = \underbrace{p}_{\text{서비스 시간}} \times \underbrace{\frac{u}{1-u}}_{\text{활용률}} \times \underbrace{\frac{CV_a^2 + CV_p^2}{2}}_{\text{변동성}}\]</div>
+  <h3>대기시간을 만드는 3가지 요인</h3>
+  <ul>
+    <li>대기시간은 <b>서비스 시간의 몇 배수</b>로 나타나지만, 서비스 시간은 활용률에도 영향을 미침</li>
+    <li>활용률이 100% 이상이면 대기행렬은 계속 늘어남 → <b>100% 미만</b>이어야 함 (u → 1 이면 u/(1−u) → ∞)</li>
+    <li>CVa 와 CVp 는 평균 서비스 시간 p 나 활용률 u 에 <b>영향을 주지 않음</b></li>
+  </ul>
+  <h3>시사점 (장기 평균값)</h3>
+  <ul><li>시스템이 빈 상태로 시작하면 첫 몇 명은 대기시간이 없다</li><li>오래 관찰하면 예상대기시간 Tq 는 실증적 평균에 다가간다</li></ul>
+  <div class="note"><span class="hand">콜센터에 대입</span>CVa = CVp = 1 이라고 가정하면 \(T_q = 4 \times \frac{0.8}{0.2} \times 1 = 16\)분, \(T = 20\)분. 평균만 보면 0 이었는데!</div>
+  <div data-widget="queue"></div>
+</section>
+
+<section class="card" id="little" data-toc="리틀의 법칙 I, Iq, Ip">
+  <h2>리틀의 법칙으로 재고 계산</h2>
+  <span class="slide-ref">p.9</span>
+  <div class="eq">\[I = R \times T = \frac{1}{a}\,(T_q + p)\]</div>
+  <div class="eq">\[I_q = \frac{1}{a}\, T_q \qquad\text{(대기 중인 평균 고객 수)}\]</div>
+  <div class="eq">\[I_p = (1-u)\times 0 + u \times 1 = u \qquad\text{(서비스 받는 중인 고객 수, 서버 1명)}\]</div>
+  <div class="note"><span class="hand">확인</span>\(I = I_q + I_p\) : \(\frac{T_q}{a} + \frac{p}{a} = I_q + u\). 콜센터 예 (Tq = 16): Iq = 16/5 = 3.2명, Ip = 0.8명, I = 4명.</div>
+</section>
+
+<section class="card" id="staffing" data-toc="직원 수 계획 · 우선순위 규칙">
+  <h2>직원 수에 대한 계획 · 우선순위 규칙</h2>
+  <span class="slide-ref">p.10 – 11</span>
+  <h3>직원 수 계획</h3>
+  <ul>
+    <li>상담원을 늘리면 대기는 줄지만 임금 증가 → 두 비용의 균형: <b>대기 비용</b> (고객 통화 비용·불만) vs <b>서비스 비용</b> (상담원 수)</li>
+    <li>추가 비용: 통화중 신호만 듣는 고객, 기다리다 끊은 고객 관련 비용</li>
+    <li>비고정적 도착 → 시간대를 몇 개 간격으로 나눌지 결정 필요: 도착률을 신뢰할 수 있게 예측할 데이터 확보 vs 대기행렬이 평형 상태가 되기엔 많은 시간이 필요</li>
+    <li>휴식 시간·근무 시간의 길이 때문에 더 복잡해질 수 있음</li>
+  </ul>
+  <h3>우선순위 규칙</h3>
+  <p>대기행렬을 완전히 없앨 수 없으므로 <b>어떤 순서로</b> 서비스할지 결정.</p>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>규칙</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td><span class="blank">최단 프로세싱 시간 (SPT)</span></td><td>서비스 시간을 미리 알 수 있을 때. 대기 중 가장 짧은 고객 먼저 → 일반적으로 <b>가장 짧은 평균 체류 시간</b></td></tr>
+      <tr><td>선착순 (FCFS)</td><td>가장 먼저 도착한 고객 먼저</td></tr>
+      <tr><td>중요도 우선</td><td>응급실</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><span class="hand">SPT 가 왜 짧아?</span>4분, 1분 고객이 대기 중이면 FCFS: 체류 4, 5 → 평균 4.5 / SPT: 1, 5 → 평균 3. 짧은 일이 긴 일 뒤에서 기다리지 않게 돼요.</div>
+</section>
+
+<section class="card" id="reduce" data-toc="변동성의 감소">
+  <h2>변동성의 감소</h2>
+  <span class="slide-ref">p.12 – 13</span>
+  <h3>도착 변동성</h3>
+  <ul>
+    <li><b>약속(예약) 시스템</b>: 서비스율에 맞춰 고객이 오도록 → 하지만 변동성을 없애지는 못하고, 공급 능력 대비 받을 예약 수를 판단해야 함</li>
+    <li><b>피크를 피하는 고객에게 혜택</b>: 영화관 조조할인, 호텔 비수기 할인, 항공사 예약 현황에 따른 가격 → 변동성을 줄이진 않지만 예측된 수요를 조정해 <b>주기성</b>을 줄임</li>
+  </ul>
+  <h3>서비스 시간 변동성</h3>
+  <ul>
+    <li>일관된 프로세스, 개별 고객 특성 파악 · 한정된 자원에 의한 영향력 감소 · 서비스 시간 변동성은 <b>품질 문제</b>를 일으키는 경우가 많음</li>
+  </ul>
+  <div class="label"><span class="tag">고려사항</span><p>수요의 계절성 반영 · 유휴 시간의 활용 · <b>자원 풀링</b>을 통한 공급 능력 강화 · 변동성의 축소 · 우선순위 규칙</p></div>
+</section>
+
+<section class="card" id="pooling" data-toc="풀링 효과 (9.00 → 3.95분)">
+  <h2><span class="blank">풀링</span> 효과</h2>
+  <span class="slide-ref">p.14</span>
+  <ul><li>대기행렬을 <b>하나로 합치고</b> 서버를 복수 개 두면 평균 대기시간이 줄어듦. 여러 자원 (m) 을 하나로 합치는 것 = 풀링 (Pooling)</li></ul>
+  <div class="eq">\[T_q \approx \frac{p}{m} \times \frac{u^{\sqrt{2(m+1)}-1}}{1-u} \times \frac{CV_a^2 + CV_p^2}{2}\]</div>
+  <p>은행 직원 2명, 각 줄 평균 도착 간격 4분 (CV = 1), 서비스 p = 3분 (CV = 1). 활용률 u = 3/4 = 0.75.</p>
+  <div class="cols">
+    <div class="box"><h4>줄 2개 따로</h4><div class="eq">\[T_q = 3 \times \frac{0.75}{1-0.75} \times \frac{1+1}{2} = 9.00\text{분}\]</div></div>
+    <div class="box"><h4>한 줄로 풀링 (m = 2, a = 2분)</h4><div class="eq">\[T_q = \frac{3}{2} \times \frac{0.75^{\sqrt{6}-1}}{1-0.75} \times \frac{1+1}{2} = 3.95\text{분}\]</div></div>
+  </div>
+  <figure class="fig">
+    <svg viewBox="0 0 520 150" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <text x="10" y="18" font-weight="600">따로 (한쪽만 밀릴 수 있음)</text>
+      <g fill="#ff6f1e"><circle cx="40" cy="45" r="7"/><circle cx="60" cy="45" r="7"/><circle cx="80" cy="45" r="7"/><circle cx="100" cy="45" r="7"/><circle cx="100" cy="95" r="7"/></g>
+      <rect x="125" y="32" width="36" height="26" rx="5" fill="#fff" stroke="#2b1a07"/><rect x="125" y="82" width="36" height="26" rx="5" fill="#fff" stroke="#2b1a07"/>
+      <text x="143" y="49" text-anchor="middle">직원</text><text x="143" y="99" text-anchor="middle">직원</text>
+      <text x="80" y="128" fill="#d14343" text-anchor="middle">한 직원은 놀고 있는데 옆 줄은 4명</text>
+      <text x="290" y="18" font-weight="600">풀링 (한 줄 → 빈 직원에게)</text>
+      <g fill="#ff6f1e"><circle cx="310" cy="70" r="7"/><circle cx="330" cy="70" r="7"/><circle cx="350" cy="70" r="7"/></g>
+      <path d="M362 70 C 390 70, 395 45, 420 45 M362 70 C 390 70, 395 95, 420 95" fill="none" stroke="#a8a29e"/>
+      <rect x="425" y="32" width="36" height="26" rx="5" fill="#fff" stroke="#2b1a07"/><rect x="425" y="82" width="36" height="26" rx="5" fill="#fff" stroke="#2b1a07"/>
+      <text x="443" y="49" text-anchor="middle">직원</text><text x="443" y="99" text-anchor="middle">직원</text>
+      <text x="400" y="128" fill="#3f9d6b" text-anchor="middle">놀고 있는 직원이 없어짐 → Tq 감소</text>
+    </svg>
+  </figure>
+  <p>위젯의 <b>bank1 / bank2</b> 프리셋으로 9.00 → 3.95 를 직접 확인해 보세요 (위 대기시간 계산기).</p>
+</section>
+
+<h2 class="part-title"><small>5.3</small>변동성의 영향</h2>
+
+<section class="card" id="trap" data-toc="평균값의 함정 (호떡)">
+  <h2>평균값의 함정</h2>
+  <span class="slide-ref">p.15</span>
+  <ul>
+    <li>호떡 포장마차: 평균 수요 5분에 1개, 공급 능력 5분에 0 ~ 2개 → 평균은 같아도 변동성 때문에 수요가 많을 때도, 공급이 못 따라갈 때도 있음</li>
+    <li>팔려면 <b>수요와 공급이 동시에</b> 발생해야 함 → 호떡을 <b>미리 만들어 저장</b> (재고 = 버퍼) 했다가 수요가 많을 때 판매</li>
+  </ul>
+  <figure class="fig">
+    <svg viewBox="0 0 520 150" font-family="Geist, Gowun Dodum, sans-serif" font-size="12" id="hotteok"></svg>
+    <figcaption>5분 단위 10구간 예시. 버퍼가 없으면 수요 &gt; 공급인 구간의 손님을 놓치고, 공급 &gt; 수요인 구간의 능력은 버려져요</figcaption>
+  </figure>
+  <script>(function(){var D=[1,2,0,1,1,2,0,1,2,0],S=[2,0,1,1,2,0,2,1,0,1],s='',sold=0,lost=0;for(var i=0;i<10;i++){var x=40+i*46;s+='<rect x="'+x+'" y="'+(70-D[i]*24)+'" width="18" height="'+D[i]*24+'" fill="#ff6f1e"/><rect x="'+(x+20)+'" y="'+(70-S[i]*24)+'" width="18" height="'+S[i]*24+'" fill="#ffd2b8"/>';var m=Math.min(D[i],S[i]);sold+=m;lost+=D[i]-m;s+='<text x="'+(x+19)+'" y="88" text-anchor="middle" fill="'+(D[i]>S[i]?'#d14343':'#6b5d4f')+'">'+(D[i]>S[i]?'놓침':'·')+'</text>';}s+='<line x1="36" y1="70" x2="504" y2="70" stroke="#2b1a07"/><rect x="40" y="108" width="12" height="12" fill="#ff6f1e"/><text x="56" y="118">수요</text><rect x="100" y="108" width="12" height="12" fill="#ffd2b8"/><text x="116" y="118">공급 가능</text><text x="40" y="142" fill="#2b1a07">평균 수요 = 평균 공급 = 1 인데, 버퍼 없이 판매 '+sold+'개 / 놓친 손님 '+lost+'명</text>';document.getElementById('hotteok').innerHTML=s;})();</script>
+</section>
+
+<section class="card" id="loss" data-toc="산출 손실 (병원 · 대기 포기)">
+  <h2>단일 자원 대기행렬의 산출 손실 · 대기 포기 고객</h2>
+  <span class="slide-ref">p.16 – 18</span>
+  <h3>병원 예시 (버퍼 없음)</h3>
+  <ul>
+    <li>환자는 3개 병실 중 한 곳으로, 평균 2시간 진단 → 입원 / 심각하면 수술실. 지연되면 안 되므로 빈자리가 있는 병원으로 응급차를 <b>우회</b> → 이 구조는 <b>버퍼를 가지지 않음</b></li>
+    <li>평균 3시간에 1명 도착, 나가는 데 평균 2시간</li>
+  </ul>
+  <div class="eq">\[\text{공급능력} = \frac{\text{자원의 수}}{\text{서비스 시간}} = \frac{3}{2} = \text{시간당 } 1.5\text{ 환자}\]</div>
+  <ul>
+    <li>가장 중요한 단계: 프로세스에 m명의 환자가 있을 확률 (= m개의 모든 서버가 바쁠 확률 → 그때 오는 환자는 손실)</li>
+    <li>이 확률은 두 변수로 결정: <b>함축된 활용률</b> \(u = \dfrac{\text{수요율}}{\text{공급능력}}\) (손실이 있으면 공급능력 &gt; 수요 조건이 필요 없음, 1 이상도 가능) 과 <b>자원의 수 m</b></li>
+  </ul>
+  <div class="note"><span class="hand">숫자로 보면</span>수요율 1/3, 공급능력 1.5 → 함축된 활용률 u = 0.222. (참고: 얼랑 손실 공식으로 계산하면 세 병실이 모두 찰 확률은 약 2.5%.)</div>
+  <h3>대기 포기 고객의 산출 손실</h3>
+  <p>대기할 수 있는 고객 수에 제한이 있는 버퍼: 최대 대기 통화 수가 정해진 콜센터, Drive through 음식점. 대책 3가지:</p>
+  <div class="tbl-wrap"><table class="t">
+    <tbody>
+      <tr><td><b>대기시간 단축</b></td><td>공급능력의 정확한 계획, 변동성의 감소</td></tr>
+      <tr><td><b>버퍼 용량 증가</b></td><td>버퍼 변경, 공간 확보</td></tr>
+      <tr><td><b>대기 포기 고객 감소</b></td><td>원만한 분위기, 중요한 정보 제공, <b>예상 대기 시간 공개</b> → 기다림이 지루하지 않게</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card" id="complex" data-toc="복합적인 변동성 관리">
+  <h2>복합적인 변동성 관리</h2>
+  <span class="slide-ref">p.19</span>
+  <ul>
+    <li>공장 조립 라인, 공항 입국 심사 같은 복잡한 시스템은 단일 서버와 차이가 큼</li>
+    <li>연속된 작업의 서버가 <b>독립적이지 않음</b>: 앞 서버에서 <b>떠나는 프로세스 = 다음 서버에 도착하는 프로세스</b> → 뒤로 갈수록 앞 서버의 변동성이 <b>중첩</b></li>
+    <li>따라서 흐름율을 높일 잠재력을 가진 <b>버퍼</b>를 적극 활용하는 것이 중요</li>
+  </ul>
+</section>
+
+<section class="card" id="sum05" data-toc="5.4 요약">
+  <h2>5.4 요약</h2>
+  <span class="slide-ref">p.20</span>
+  <ul>
+    <li>변동성은 모든 프로세스에 내재, 각 단계의 변동성은 동일하지 않음</li>
+    <li>한 곳의 변동성 증가도 전체 산출량, 재고, 사이클 타임, 고객 서비스에 영향 → 서비스 품질 저하</li>
+    <li>대응 규칙: <b>리틀의 법칙</b>으로 평균대기 시간 예측 · <b>직원 수 계획</b> · <b>우선순위 규칙</b>으로 체류시간 조정 · <b>버퍼 또는 예약 시스템</b></li>
+  </ul>
+</section>
+
+<section class="card tint" id="quiz05" data-toc="셀프 체크">
+  <h2>Self-check</h2>
+  <details class="quiz"><summary>p = 4분, a = 5분이면 활용률은? 평균만 보면 대기가 있어야 하나?</summary><div class="ans">u = 4/5 = 80%. 평균만 보면 대기 없음 — 하지만 도착·서비스의 변동성 때문에 대기가 생김.</div></details>
+  <details class="quiz"><summary>지수분포 도착 간격의 CV 는? 그 이유는?</summary><div class="ans">1. 지수분포는 표준편차 = 평균이라서.</div></details>
+  <details class="quiz"><summary>u 가 0.8 → 0.9 로 오르면 u/(1−u) 는 몇 배?</summary><div class="ans">4 → 9, 2.25배. 활용률이 높을수록 대기가 폭발적으로 증가.</div></details>
+  <details class="quiz"><summary>a = 5, Tq = 16 이면 Iq 와 I 는? (p = 4)</summary><div class="ans">Iq = 16/5 = 3.2, I = (16+4)/5 = 4.</div></details>
+  <details class="quiz"><summary>은행 예에서 풀링 전·후 Tq 는?</summary><div class="ans">9.00분 → 3.95분.</div></details>
+  <details class="quiz"><summary>대기 포기 고객 손실을 줄이는 3가지 대책은?</summary><div class="ans">대기시간 단축, 버퍼 용량 증가, 대기 포기 고객 감소 (예상 대기시간 공개 등).</div></details>
+  <div class="quiz-cta"><div class="qc-text"><span class="hand">다 풀어 봤으면?</span><b>05장 퀴즈</b><span>바로 채점하고 틀린 건 오답노트에 모아 줘요.</span></div><div class="qc-btns"><a class="pill primary" href="quiz.html?ch=05">05장 퀴즈 풀기 →</a><a class="pill small" href="quiz.html?ch=all">전체 퀴즈</a></div></div>
+</section>
+
+<nav class="ch-nav"></nav>
+    </main>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07. 용량계획 — om notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Gaegu:wght@400;700&family=Geist:wght@400;500&family=Gowun+Dodum&family=JetBrains+Mono&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script defer src="assets/app.js"></script>
+<script defer src="assets/om-widgets.js"></script>
+<script defer src="assets/notes.js"></script>
+</head>
+<body data-ch="07">
+
+<div class="wrap">
+  <div class="hero">
+    <span class="kicker">7장 · 용량계획</span>
+    <h1 class="display">the slowest<br>step wins</h1>
+    <p class="lede">용량의 개념·구분·측정, 규모의 경제와 비경제, <span class="mk">흐름율 = Min{가용 유입량, 수요량, 용량}</span>, 병목, 흐름 제약, 가동률, 여유용량, 용량 증설 전략, 그리고 피자점 예제 두 개.</p>
+    <div class="meta">원본: OM_Chap07.student.pdf</div>
+    <div data-sticker="factory" data-rot="8" style="right:8%;top:80px;width:72px;height:72px"></div>
+    <div data-sticker="box" data-rot="-10" style="right:20%;top:200px;width:56px;height:56px"></div>
+  </div>
+
+  <div class="page-grid">
+    <aside class="toc"></aside>
+    <main class="lesson">
+
+<h2 class="part-title"><small>part 1</small>용량의 개요</h2>
+
+<section class="card" id="concept" data-toc="용량의 개념 · 중요성">
+  <h2>1) 용량의 개념</h2>
+  <span class="slide-ref">p.2</span>
+  <ul>
+    <li><span class="blank">용량 (capacity)</span> : 어떤 프로세스 또는 시스템의 <b>최대 산출률</b> — 잔업, 하청 등을 포함하지 않은 정상적인 운영에서 시간당 최대 생산량</li>
+  </ul>
+  <h3>용량계획의 중요성</h3>
+  <ul>
+    <li>기업의 <b>최대 산출량</b>을 결정 — 용량을 초과하는 수요는 충족 불가능</li>
+    <li>기업의 <b>비용구조</b>를 결정 — 과잉용량은 운영비용 증가</li>
+    <li>이후의 다른 생산운영계획들을 <b>제약</b></li>
+    <li>한번 정해진 용량을 <b>변경하는 것은 쉽지 않음</b></li>
+  </ul>
+</section>
+
+<section class="card" id="kinds" data-toc="용량의 구분 4가지">
+  <h2>2) 용량의 구분</h2>
+  <span class="slide-ref">p.3 – 4</span>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>구분</th><th>의미</th></tr></thead>
+    <tbody>
+      <tr><td><span class="blank">설계용량</span> (design)</td><td><b>이상적인 여건</b>에서 이론적으로 산출할 수 있는 최대용량 (예: A공장은 1년에 20만 대를 생산하도록 설계)</td></tr>
+      <tr><td><span class="blank">기대용량</span> (expected)</td><td><b>현실적으로</b> 최대로 기대되는 생산능력 — 여러 이유로 보통 설계용량에 미치지 못함</td></tr>
+      <tr><td><span class="blank">피크용량</span> (peak)</td><td><b>잔업이나 임시직</b> 등을 포함한 생산능력. 단기적으로 가능한 최대 산출률, 장기적으로 유지 불가</td></tr>
+      <tr><td><span class="blank">안정용량</span> (sustained)</td><td><b>장기적으로</b> 안정된 산출률</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><span class="hand">서비스업은?</span>서비스업체에서는 안정용량보다 <b>피크생산능력</b>이 더 중요해요 (서비스는 저장이 안 되니 몰리는 순간을 감당해야 해서).</div>
+  <figure class="fig">
+    <svg viewBox="0 0 480 150" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <g><rect x="40" y="20" width="400" height="22" rx="6" fill="#ffd2b8"/><text x="48" y="36">설계용량 (이상적)</text></g>
+      <g><rect x="40" y="52" width="330" height="22" rx="6" fill="#ff6f1e"/><text x="48" y="68" fill="#fff">기대용량 (현실)</text></g>
+      <g><rect x="40" y="88" width="300" height="22" rx="6" fill="#a8a29e"/><text x="48" y="104" fill="#fff">안정용량 (장기)</text></g>
+      <g><rect x="40" y="120" width="360" height="22" rx="6" fill="#fff" stroke="#ce500a" stroke-dasharray="4 3"/><text x="48" y="136" fill="#ce500a">피크용량 (잔업·임시직, 단기만)</text></g>
+    </svg>
+    <figcaption>(개념 그림) 길이는 대략적인 크기 관계만 나타냄</figcaption>
+  </figure>
+</section>
+
+<section class="card" id="measure" data-toc="용량의 측정">
+  <h2>3) 용량의 측정</h2>
+  <span class="slide-ref">p.5</span>
+  <div class="cols">
+    <div class="box"><h4><span class="blank">산출지표</span> (output)</h4><p style="font-size:15px">시간당 생산량 (예: 일일 차량 생산 대수). <b>다품종 유연생산</b>에서는 측정하기 어려운 경우가 많음</p></div>
+    <div class="box"><h4><span class="blank">투입지표</span> (input)</h4><p style="font-size:15px">산출량을 결정하는 <b>설비규모</b> (종업원 수, 생산라인 개수, 병상 수, 식당 테이블 수, 호텔 객실 수)</p></div>
+  </div>
+</section>
+
+<section class="card" id="scale" data-toc="규모의 경제 / 비경제">
+  <h2>4) 용량과 규모의 경제</h2>
+  <span class="slide-ref">p.6 – 8</span>
+  <div class="cols">
+    <div class="box"><h4><span class="blank">규모의 경제</span></h4><p style="font-size:15px">생산규모 ↑ → 단위당 평균생산비용 ↓</p><ul style="font-size:14.5px"><li>고정비용의 분산</li><li>설비구축비용의 경제성 향상 (어떤 비용은 규모와 관계없이 비슷)</li><li>원자재 대량 구매 할인</li><li>대량생산을 통한 라인프로세스화</li></ul></div>
+    <div class="box"><h4><span class="blank">규모의 비경제</span></h4><p style="font-size:15px">어느 한계를 넘으면 단위당 평균생산비용이 오히려 ↑</p><ul style="font-size:14.5px"><li>복잡성 (의사소통비용 증가)</li><li>관리 초점의 상실</li><li>비효율성 (조직의 관료화)</li></ul></div>
+  </div>
+  <figure class="fig">
+    <svg viewBox="0 0 520 230" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <line x1="50" y1="200" x2="500" y2="200" stroke="#2b1a07"/><line x1="50" y1="200" x2="50" y2="15" stroke="#2b1a07"/>
+      <text x="56" y="22" fill="#6b5d4f">이용객 1인당 운영비용</text><text x="495" y="218" text-anchor="end" fill="#6b5d4f">객실 수</text>
+      <path d="M70 60 Q 140 175 210 70" fill="none" stroke="#a8a29e" stroke-width="2"/>
+      <path d="M190 120 Q 270 210 350 120" fill="none" stroke="#ff6f1e" stroke-width="2.4"/>
+      <path d="M330 90 Q 400 185 470 50" fill="none" stroke="#a8a29e" stroke-width="2"/>
+      <circle cx="140" cy="117" r="4" fill="#2b1a07"/><circle cx="270" cy="165" r="4" fill="#ce500a"/><circle cx="400" cy="137" r="4" fill="#2b1a07"/>
+      <g text-anchor="middle"><text x="140" y="45">250실 규모</text><text x="270" y="108" fill="#ce500a">500실 규모</text><text x="400" y="78">750실 규모</text></g>
+      <path d="M140 117 L270 165 L400 137" fill="none" stroke="#d14343" stroke-dasharray="4 3"/>
+      <text x="190" y="190" fill="#3f9d6b" text-anchor="middle">규모의 경제 ↘</text><text x="345" y="190" fill="#d14343" text-anchor="middle">↗ 규모의 비경제</text>
+    </svg>
+    <figcaption>각 규모마다 비용을 최소화하는 생산량이 존재 — 이 예에서는 500실이 가장 낮은 1인당 운영비용</figcaption>
+  </figure>
+</section>
+
+<h2 class="part-title"><small>part 2</small>용량과 흐름율</h2>
+
+<section class="card" id="flow" data-toc="흐름율 · 병목">
+  <h2>1) 흐름율의 정의 · 2) 병목과 용량</h2>
+  <span class="slide-ref">p.9 – 11</span>
+  <div class="cols">
+    <div class="box"><h4>용량</h4><p style="font-size:15px">단위시간당 산출할 수 있는 <b>최대량</b> — “얼마나 생산할 수 <b>있는가</b>”</p></div>
+    <div class="box"><h4><span class="blank">흐름율</span> (flow rate)</h4><p style="font-size:15px">단위시간당 <b>실제</b> 산출량 — “얼마나 생산하고 <b>있는가</b>”</p></div>
+  </div>
+  <div class="eq">\[\text{흐름율} = \min\{\text{가용 유입량},\; \text{수요량},\; \text{용량}\}\]</div>
+  <ul>
+    <li><span class="blank">병목 (bottleneck)</span> : 여러 자원으로 구성된 프로세스에서 <b>최소 용량</b>을 가진 자원</li>
+    <li>프로세스 전체의 용량은 병목 자원의 용량에 의해 결정</li>
+  </ul>
+  <div class="eq">\[\text{프로세스 전체의 용량} = \min\{\text{자원 1의 용량},\; \dots,\; \text{자원 } n\text{의 용량}\}\]</div>
+  <figure class="fig">
+    <svg viewBox="0 0 520 120" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <text x="10" y="64">Input</text>
+      <path d="M50 30 H150 L180 50 V70 L150 90 H50 Z" fill="#ffd2b8"/>
+      <rect x="180" y="50" width="90" height="20" fill="#ff6f1e"/>
+      <path d="M270 50 L300 30 H420 V90 H300 L270 70 Z" fill="#ffd2b8"/>
+      <text x="450" y="64">Output</text>
+      <text x="225" y="44" text-anchor="middle" fill="#ce500a" font-weight="600">병목</text>
+      <text x="225" y="104" text-anchor="middle" fill="#6b5d4f">가장 좁은 곳이 전체 흐름을 정함</text>
+    </svg>
+  </figure>
+</section>
+
+<section class="card" id="constraint" data-toc="3) 흐름 제약 · 4) 가동률">
+  <h2>3) 흐름 제약 · 4) 가동률</h2>
+  <span class="slide-ref">p.12 – 14</span>
+  <div class="cols">
+    <div class="box"><h4><span class="blank">공급량에 의한</span> 흐름 제약 (supply-constrained)</h4><p style="font-size:15px">수요량 &gt; 용량 → 흐름율 = 용량. 팔 수 있는데 못 만듦.</p></div>
+    <div class="box"><h4><span class="blank">수요량에 의한</span> 흐름 제약 (demand-constrained)</h4><p style="font-size:15px">수요량 &lt; 용량 → 흐름율 = 수요량. 만들 수 있는데 안 팔림.</p></div>
+  </div>
+  <div class="eq">\[\text{가동률 (utilization)} = \frac{\text{흐름율}}{\text{용량}}\]</div>
+  <p>용량이 실제로 사용되고 있는 정도. 흐름율 ≤ 용량이므로 가동률은 <b>100% 를 넘지 못함</b>.</p>
+</section>
+
+<h2 class="part-title"><small>part 3</small>여유용량과 용량 증설 전략</h2>
+
+<section class="card" id="cushion" data-toc="여유용량 · 증설 전략">
+  <h2>1) 여유용량 · 2) 용량 증설 전략</h2>
+  <span class="slide-ref">p.15 – 16</span>
+  <ul><li><span class="blank">여유용량 (capacity cushion)</span> : 일시적인 수요나 용량 변동에 대비하기 위해 여유분으로 준비해 둔 용량</li></ul>
+  <div class="eq">\[\text{여유용량} = 100\% - \text{평균 가동률}\]</div>
+  <p>여유용량은 <b>비용을 야기한다!</b></p>
+  <figure class="fig">
+    <svg viewBox="0 0 560 170" font-family="Geist, Gowun Dodum, sans-serif" font-size="12">
+      <g transform="translate(10,0)">
+        <text x="0" y="16" font-weight="600">확장적 전략 (expansionist)</text>
+        <line x1="10" y1="150" x2="250" y2="150" stroke="#2b1a07"/><line x1="10" y1="150" x2="10" y2="25" stroke="#2b1a07"/>
+        <path d="M10 120 H60 V95 H120 V70 H180 V45 H240" fill="none" stroke="#ff6f1e" stroke-width="2.4"/>
+        <path d="M10 140 L240 55" fill="none" stroke="#d14343" stroke-width="2"/>
+        <path d="M10 120 H60 V95 H120 V70 H180 V45 H240 L240 55 L10 140 Z" fill="#ff6f1e" opacity=".12"/>
+        <text x="130" y="140" fill="#ce500a">여유용량비용 발생</text>
+      </g>
+      <g transform="translate(290,0)">
+        <text x="0" y="16" font-weight="600">유보적 전략 (wait-and-see)</text>
+        <line x1="10" y1="150" x2="250" y2="150" stroke="#2b1a07"/><line x1="10" y1="150" x2="10" y2="25" stroke="#2b1a07"/>
+        <path d="M10 145 H80 V120 H140 V95 H200 V70 H240" fill="none" stroke="#ff6f1e" stroke-width="2.4"/>
+        <path d="M10 140 L240 55" fill="none" stroke="#d14343" stroke-width="2"/>
+        <text x="120" y="140" fill="#d14343">단기대응비용 발생</text>
+        <text x="200" y="45" fill="#d14343" font-size="11">수요</text>
+      </g>
+    </svg>
+    <figcaption>파란 계단 = 용량, 빨간 선 = 수요. 확장적: 수요보다 먼저 증설 (여유용량 비용) / 유보적: 수요를 따라 나중에 증설 (잔업·하청 등 단기대응 비용) / 혼합 전략: 둘의 중간</figcaption>
+  </figure>
+</section>
+
+<h2 class="part-title"><small>예제</small>A 피자점</h2>
+
+<section class="card" id="pizza1" data-toc="예제 1 (공급 제약)">
+  <h2>예제 1 — 수요 시간당 6개</h2>
+  <span class="slide-ref">p.17 – 23</span>
+  <p>공정별 용량 = (자원 수 × 60) / 소요시간(분).</p>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>공정</th><th>소요시간</th><th>인력/설비</th><th>용량 (개/시간)</th><th>가동률 (흐름율 5)</th></tr></thead>
+    <tbody>
+      <tr><td>주문접수</td><td>6분</td><td>영희</td><td>60/6 = 10</td><td>5/10 = 50%</td></tr>
+      <tr><td>도우 만들기</td><td>7.5분</td><td>철수</td><td>60/7.5 = 8</td><td>5/8 = 62.5%</td></tr>
+      <tr><td>토핑</td><td>5분</td><td>유진</td><td>60/5 = 12</td><td>5/12 = 41.7%</td></tr>
+      <tr><td><b>굽기</b></td><td>24분</td><td>오븐 2대</td><td><b>2×60/24 = 5</b></td><td><b>5/5 = 100%</b></td></tr>
+      <tr><td>자르기 및 포장</td><td>5분</td><td>길동</td><td>60/5 = 12</td><td>5/12 = 41.7%</td></tr>
+      <tr><td>배달</td><td>20분</td><td>민수, 준호</td><td>2×60/20 = 6</td><td>5/6 = 83.3%</td></tr>
+    </tbody>
+  </table></div>
+  <ol>
+    <li>공정별 용량: 위 표</li>
+    <li>병목 공정: <b><span class="blank">굽기</span></b> (최소 용량 5)</li>
+    <li>전체 용량: 시간당 <b>5개</b> — 병목 공정의 용량이 결정</li>
+    <li>흐름율: min{수요 6, 용량 5} = <b>5개/시간</b> → <span class="blank">공급량</span>에 의한 흐름 제약</li>
+    <li>가동률 = 5/5 = <b>100%</b>, 여유용량 = <b>0%</b> — 수요가 용량을 아무리 초과해도 가동률은 100% 를 넘지 못함</li>
+    <li>공정별 가동률: 위 표 (각 공정 가동률 = 흐름율 / 공정 용량)</li>
+  </ol>
+  <div class="note"><span class="hand">슬라이드 표기</span>슬라이드 표에 도우 만들기 용량이 “(=60/8)” 로 적혀 있는데 소요시간 7.5분이므로 60/7.5 = 8 이 맞는 식이에요.</div>
+</section>
+
+<section class="card" id="pizza2" data-toc="예제 2 (수요 제약)">
+  <h2>예제 2 — 오븐 2대 추가, 배달 1명 추가</h2>
+  <span class="slide-ref">p.24 – 30</span>
+  <div class="tbl-wrap"><table class="t">
+    <thead><tr><th>공정</th><th>인력/설비</th><th>용량 (개/시간)</th><th>가동률 (흐름율 6)</th></tr></thead>
+    <tbody>
+      <tr><td>주문접수</td><td>영희</td><td>10</td><td>6/10 = 60%</td></tr>
+      <tr><td><b>도우 만들기</b></td><td>철수</td><td><b>8</b></td><td><b>6/8 = 75%</b></td></tr>
+      <tr><td>토핑</td><td>유진</td><td>12</td><td>6/12 = 50%</td></tr>
+      <tr><td>굽기</td><td>오븐 4대</td><td>4×60/24 = 10</td><td>6/10 = 60%</td></tr>
+      <tr><td>자르기 및 포장</td><td>길동</td><td>12</td><td>6/12 = 50%</td></tr>
+      <tr><td>배달</td><td>3명</td><td>3×60/20 = 9</td><td>6/9 = 66.7%</td></tr>
+    </tbody>
+  </table></div>
+  <ol>
+    <li>병목 공정: <b><span class="blank">도우 만들기</span></b> (용량 8) — 병목이 <b>이동</b>했어요</li>
+    <li>전체 용량: 시간당 <b>8개</b></li>
+    <li>흐름율: min{수요 6, 용량 8} = <b>6개/시간</b> → <span class="blank">수요량</span>에 의한 흐름 제약</li>
+    <li>가동률 = 6/8 = <b>75%</b>, 여유용량 = 100% − 75% = <b>25%</b></li>
+  </ol>
+  <div class="note"><span class="hand">주의</span>병목 공정 (도우) 의 가동률도 100% 가 아니라 75% 예요. 수요 제약일 때는 병목도 쉬는 시간이 있어요. 슬라이드 (6) 표의 인력/설비 칸은 예제 1 것이 그대로 남아 있지만 용량·가동률은 예제 2 값이에요.</div>
+  <div data-widget="pizza"></div>
+</section>
+
+<section class="card" id="sum07" data-toc="요약">
+  <h2>요약</h2>
+  <span class="slide-ref">p.30</span>
+  <div class="cols">
+    <div class="box"><h4>주요 개념</h4><p style="font-size:15px">용량의 개념과 구분 · 용량의 측정 단위 · 규모의 경제/비경제</p></div>
+    <div class="box"><h4>주요 기법</h4><p style="font-size:15px">흐름율 · 병목 · 흐름제약 · 가동률 · 여유용량 · 용량 증설 전략</p></div>
+  </div>
+</section>
+
+<section class="card tint" id="quiz07" data-toc="셀프 체크">
+  <h2>Self-check</h2>
+  <details class="quiz"><summary>잔업·임시직을 포함한, 단기적으로만 가능한 용량은?</summary><div class="ans">피크용량.</div></details>
+  <details class="quiz"><summary>병상 수, 호텔 객실 수는 산출지표? 투입지표?</summary><div class="ans">투입지표.</div></details>
+  <details class="quiz"><summary>흐름율 공식은?</summary><div class="ans">흐름율 = Min{가용 유입량, 수요량, 용량}.</div></details>
+  <details class="quiz"><summary>예제 1 에서 오븐을 1대만 추가하면 (3대) 병목과 흐름율은?</summary><div class="ans">굽기 용량 3×60/24 = 7.5 → 병목은 배달 6. 흐름율 = min{6, 6} = 6, 가동률 100%.</div></details>
+  <details class="quiz"><summary>확장적 전략과 유보적 전략이 각각 발생시키는 비용은?</summary><div class="ans">확장적 = 여유용량비용, 유보적 = 단기대응비용.</div></details>
+  <div class="quiz-cta"><div class="qc-text"><span class="hand">다 풀어 봤으면?</span><b>07장 퀴즈</b><span>바로 채점하고 틀린 건 오답노트에 모아 줘요.</span></div><div class="qc-btns"><a class="pill primary" href="quiz.html?ch=07">07장 퀴즈 풀기 →</a><a class="pill small" href="quiz.html?ch=all">전체 퀴즈</a></div></div>
+</section>
+
+<nav class="ch-nav"></nav>
+    </main>
+  </div>
+</div>
+</body>
+</html>

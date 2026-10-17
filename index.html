@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>om notebook — 생산운영관리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Gaegu:wght@400;700&family=Geist:wght@400;500&family=Gowun+Dodum&family=JetBrains+Mono&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script defer src="assets/app.js"></script>
+<style>
+  .home-hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; padding: 64px 0 24px; position: relative; }
+  .ticket { position: relative; max-width: 360px; margin-left: auto; background: #fff; border: 1.5px solid var(--charcoal); border-radius: 18px; padding: 22px 24px; box-shadow: var(--shadow-card); transform: rotate(3deg); }
+  .ticket .route { display: flex; align-items: center; gap: 10px; font-family: var(--font-ui); font-size: 13px; color: var(--muted); }
+  .ticket .route b { font-family: var(--font-display); font-size: 34px; color: var(--charcoal); font-weight: 400; }
+  .ticket .route .line { flex: 1; height: 0; border-top: 2px dashed var(--orange); position: relative; }
+  .ticket .route .line::after { content: "✈"; position: absolute; left: 45%; top: -12px; color: var(--orange); font-size: 16px; }
+  .ticket .rows { margin-top: 16px; border-top: 1px dashed var(--line); padding-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; font-family: var(--font-ui); font-size: 12px; color: var(--muted); }
+  .ticket .rows span { display: block; color: var(--charcoal); font-size: 15px; font-weight: 500; margin-top: 2px; }
+  .ticket .stamp { position: absolute; right: -18px; bottom: -22px; font-family: var(--font-hand); color: var(--orange); font-size: 24px; transform: rotate(-10deg); background: var(--cream); border: 1.5px solid var(--orange); border-radius: 999px; padding: 4px 14px; }
+  .overall { font-family: var(--font-ui); font-size: 14px; color: var(--muted); margin-top: 18px; }
+  .overall .bar { height: 8px; border-radius: 8px; background: #fff0e6; border: 1px solid var(--line); overflow: hidden; max-width: 360px; margin-top: 6px; }
+  .overall .bar i { display: block; height: 100%; width: 0; background: var(--orange); transition: width .4s; }
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .info-grid .box h4 { margin-top: 0; }
+  .weeks { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; font-family: var(--font-ui); font-size: 13.5px; }
+  .weeks div { background: #fff; border: 1.5px solid var(--charcoal); border-radius: 10px; padding: 8px 10px; }
+  .weeks div b { display: block; color: var(--orange); font-size: 12px; }
+  .weeks div.exam { background: var(--charcoal); color: #fff; border-color: var(--charcoal); }
+  .weeks div.exam b { color: #ffd2b8; }
+  .weeks div.here { border-color: var(--orange); box-shadow: inset 0 0 0 1px var(--orange); }
+  @media (max-width: 860px) { .home-hero { grid-template-columns: 1fr; } .ticket { margin: 30px auto 10px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="home-hero">
+    <div>
+      <span class="kicker">생산운영관리 · 2026 · IE34081</span>
+      <h1 class="display">meet your<br>om notebook</h1>
+      <p class="lede" style="font-size:20px;max-width:560px">강의자료 1 ~ 7장 (개념 → 전략 → 제품 설계 → 프로세스 → 변동성 → 입지 → 용량) 을 <span class="mk">빠짐없이</span> 정리한 공부 노트. 학생용 슬라이드의 <b>빈칸</b>은 가려 두었으니 눌러서 확인하고, 예제는 위젯으로 직접 돌려 보세요.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="pill primary" href="ch01-concept.html">처음부터 시작하기 →</a>
+        <a class="pill" href="summary.html">★ 한눈에 요약</a>
+        <a class="pill" href="compare.html">★ 한눈에 비교</a>
+        <a class="pill" href="quiz.html">★ 퀴즈</a>
+        <a class="pill" href="#review">공식 한 장</a>
+      </div>
+      <div class="overall"><span class="ov-text">진도 불러오는 중…</span><div class="bar"><i></i></div></div>
+    </div>
+    <div style="position:relative">
+      <div class="ticket">
+        <div class="route"><div><b>IN</b><br>input</div><div class="line"></div><div style="text-align:right"><b>OUT</b><br>output</div></div>
+        <div class="rows">
+          <div>class<span>생산운영관리</span></div>
+          <div>gate<span>1 → 7장</span></div>
+          <div>goal<span>max 산출/투입</span></div>
+          <div>watch out<span>bottleneck</span></div>
+        </div>
+        <div class="stamp">midterm ready</div>
+      </div>
+      <div data-sticker="compass" data-rot="-14" style="left:0;bottom:-30px;width:60px;height:60px"></div>
+      <div data-sticker="pin" data-rot="11" style="right:-6px;top:-34px;width:56px;height:56px"></div>
+    </div>
+  </div>
+
+  <div id="reviewBox"></div>
+
+  <h2 class="part-title" style="margin-top:56px"><small>the big picture</small>how it all connects</h2>
+  <div class="roadmap" style="flex-wrap:wrap">
+    <span class="node">01 개념: 투입 → 산출</span><span class="arr">→</span>
+    <span class="node">02 전략: 무엇으로 경쟁?</span><span class="arr">→</span>
+    <span class="node">03 설계: 무엇을 만들까</span><span class="arr">→</span>
+    <span class="node">04 프로세스: 어떻게 만들까</span><span class="arr">→</span>
+    <span class="node hot">05 변동성: 왜 줄이 생기나</span><span class="arr">→</span>
+    <span class="node">06 입지: 어디서</span><span class="arr">→</span>
+    <span class="node hot">07 용량: 얼마나</span>
+  </div>
+
+  <div class="ch-grid">
+    <a class="ch-card" href="ch01-concept.html" data-ch="01">
+      <span class="nl">27 slides</span><div class="no">01</div>
+      <h3>what is operations</h3><div class="ko">생산운영관리의 개념</div>
+      <ul><li>기업의 3대 기능 · 프로세스 · 시스템</li><li>제조업 vs 서비스업 · 서비스화</li><li>의사결정 · 발전 과정 · 테일러</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+    <a class="ch-card" href="ch02-strategy.html" data-ch="02">
+      <span class="nl">24 slides</span><div class="no">02</div>
+      <h3>operations strategy</h3><div class="ko">생산 전략과 생산성</div>
+      <ul><li>미션 · 비전 · 목적 · 목표 · 전략 · 전술</li><li>네 가지 경쟁우선순위</li><li>생산성 계산 · 효과성 vs 효율성</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+    <a class="ch-card" href="ch03-design.html" data-ch="03">
+      <span class="nl">27 slides</span><div class="no">03</div>
+      <h3>product design</h3><div class="ko">제품 설계 및 개발</div>
+      <ul><li>설계의 과정 · 동시공학</li><li>DFM · 가치공학 · 모듈화 · 차별화 지연</li><li>신뢰성 · 다구찌 · QFD · 카노</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+    <a class="ch-card" href="ch04-process.html" data-ch="04">
+      <span class="nl">25 + 7 + 8 slides</span><div class="no">04</div>
+      <h3>process &amp; layout</h3><div class="ko">프로세스 분석 · 선택 · 설비배치</div>
+      <ul><li>분석 6단계 · 공정도 기호 5개</li><li>5가지 프로세스 유형 · 라인 밸런싱</li><li>제품-프로세스 행렬 · 배치 유형</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+    <a class="ch-card" href="ch05-variability.html" data-ch="05">
+      <span class="nl">20 slides</span><div class="no">05</div>
+      <h3>process variability</h3><div class="ko">프로세스 변동성</div>
+      <ul><li>변동성의 4가지 원인 · CV · 지수분포</li><li>대기시간 공식 · 리틀의 법칙</li><li>풀링 · 산출 손실</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+    <a class="ch-card" href="ch06-location.html" data-ch="06">
+      <span class="nl">38 slides</span><div class="no">06</div>
+      <h3>facility location</h3><div class="ko">입지선택</div>
+      <ul><li>제조업 · 서비스업 입지요인</li><li>가중점수 · 무게중심 · 손익분기점</li><li>복수시설 휴리스틱 · 네트워크 최적화</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+    <a class="ch-card" href="ch07-capacity.html" data-ch="07">
+      <span class="nl">30 slides</span><div class="no">07</div>
+      <h3>capacity planning</h3><div class="ko">용량계획</div>
+      <ul><li>용량의 구분 · 측정 · 규모의 경제</li><li>흐름율 · 병목 · 흐름 제약 · 가동률</li><li>여유용량 · 증설 전략 · 피자점</li></ul>
+      <div class="mini-bar"><i></i></div>
+    </a>
+  </div>
+
+  <h2 class="part-title"><small>chap 00</small>course info</h2>
+  <section class="card" id="course">
+    <h2>수업 안내</h2>
+    <span class="slide-ref">Chap00 p.1 – 8</span>
+    <div class="info-grid">
+      <div class="box"><h4>교수 · 수업</h4><p style="font-size:15px">홍순도 교수 (Office 10624)<br>월·수 10:30 – 11:45, 10303 (강의) / 10609 (실습)<br>Office hour: 화 15:00 – 16:30 또는 약속<br>TA: 류지현 (Office 10628)</p></div>
+      <div class="box"><h4>교재</h4><p style="font-size:15px">문일경 외, 『생산 및 운영관리』 개정3판, 생능, 2024<br><span style="color:var(--muted)">참고: 이상범 외 『현대 생산운영관리』, Cachon·Terwiesch 『생산 서비스 운영관리』, 『제조과학의 법칙』</span></p></div>
+      <div class="box"><h4>성적</h4>
+        <div class="tbl-wrap"><table class="t" style="font-size:14px"><tbody>
+          <tr><td>중간고사</td><td>35%</td></tr><tr><td>기말고사</td><td>35%</td></tr><tr><td>과제</td><td>15%</td></tr><tr><td>Cheat Sheet</td><td>5%</td></tr><tr><td>출석</td><td>10% (결석 1회 −0.5%)</td></tr>
+        </tbody></table></div></div>
+      <div class="box"><h4>시험 · 과제 규칙</h4><ul style="font-size:14.5px"><li>시험 <b>75분</b>, <b>공학용 계산기 필수</b></li><li><b>A4 2장 양면 자필</b> Cheat Sheet (상단에 이름, 미제출 시 감점)</li><li>과제 4 ~ 6회, <b>수기 작성</b> (프린트 불가), 늦으면 하루 −10%</li><li>4인 이내 토론 가능, 개인 의견으로 작성, 조원 명시</li></ul></div>
+    </div>
+    <h3>주차별 일정</h3>
+    <div class="weeks">
+      <div class="here"><b>1주</b>생산관리 개론</div><div class="here"><b>2주</b>제품 설계 및 개발</div><div class="here"><b>3주</b>프로세스 분석</div><div class="here"><b>4주</b>프로세스 변동성</div><div class="here"><b>5주</b>입지선택</div><div class="here"><b>6주</b>용량계획</div><div><b>7주</b>수요예측</div><div class="exam"><b>8주</b>중간고사</div><div><b>9주</b>총괄생산계획</div><div><b>10주</b>일정계획 · 프로젝트</div><div><b>11주</b>자재소요계획 MRP</div><div><b>12주</b>재고관리</div><div><b>13주</b>품질경영</div><div><b>14주</b>린 생산 · SCM</div><div class="exam"><b>15주</b>기말고사</div>
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin-top:10px">테두리 강조 = 이 노트에 들어 있는 범위.</p>
+  </section>
+
+  <h2 class="part-title" id="review"><small>시험 전에 이것만 보기</small>one-page cheat sheet</h2>
+  <section class="card">
+    <h2>핵심 공식 모음</h2>
+    <div class="tbl-wrap"><table class="t">
+      <thead><tr><th>개념</th><th>식</th><th>장</th></tr></thead>
+      <tbody>
+        <tr><td>생산성</td><td>\(\text{생산성} = \dfrac{\text{산출}}{\text{투입}}\) (종합 / 단일요소 / 다요소)</td><td>02</td></tr>
+        <tr><td>가치공학</td><td>\(\text{가치} = \dfrac{\text{기능}}{\text{비용}}\)</td><td>03</td></tr>
+        <tr><td>신뢰성</td><td>직렬 \(R = R_1R_2\cdots R_n\), 병렬 \(R = R_1 + (1-R_1)R_2\)</td><td>03</td></tr>
+        <tr><td>라인 밸런싱</td><td>산출률 = 3600 / 주기시간, 효율 = \(\dfrac{\sum t}{n \times C}\), 유휴 = \(nC - \sum t\), 최소 주기 \(\ge \sum t / n\)</td><td>04</td></tr>
+        <tr><td>처리비율</td><td>\(\dfrac{\text{총처리시간}}{\text{총생산시간}}\): 잡숍·뱃치 10 – 20%, 조립·연속 90 – 100%</td><td>04</td></tr>
+        <tr><td>변동계수</td><td>\(CV = \dfrac{\sigma}{\mu}\), 지수분포 \(CV = 1\), \(P(T \le t) = 1 - e^{-t/a}\)</td><td>05</td></tr>
+        <tr><td>활용률</td><td>\(u = \dfrac{p}{a}\) (서버 1), \(u = \dfrac{p}{a\,m}\) (서버 m)</td><td>05</td></tr>
+        <tr><td>대기시간</td><td>\(T_q = p \cdot \dfrac{u}{1-u} \cdot \dfrac{CV_a^2 + CV_p^2}{2}\), \(T = T_q + p\)</td><td>05</td></tr>
+        <tr><td>풀링 (m 서버)</td><td>\(T_q \approx \dfrac{p}{m} \cdot \dfrac{u^{\sqrt{2(m+1)}-1}}{1-u} \cdot \dfrac{CV_a^2 + CV_p^2}{2}\)</td><td>05</td></tr>
+        <tr><td>리틀의 법칙</td><td>\(I = R \cdot T = \dfrac{1}{a}(T_q + p)\), \(I_q = \dfrac{T_q}{a}\), \(I_p = u\)</td><td>05</td></tr>
+        <tr><td>가중점수</td><td>\(WS = \sum w_k s_k\) → 최대</td><td>06</td></tr>
+        <tr><td>부하-거리</td><td>\(ld = \sum l_i d_i\), \(d_i = |x_i - x^*| + |y_i - y^*|\) → 최소</td><td>06</td></tr>
+        <tr><td>무게중심</td><td>\(x^* = \dfrac{\sum l_i x_i}{\sum l_i}\), \(y^* = \dfrac{\sum l_i y_i}{\sum l_i}\)</td><td>06</td></tr>
+        <tr><td>손익분기점</td><td>\(F_1 + c_1 Q = F_2 + c_2 Q \Rightarrow Q = \dfrac{F_2 - F_1}{c_1 - c_2}\)</td><td>06</td></tr>
+        <tr><td>네트워크 모델</td><td>\(\min \sum f_i y_i + \sum\sum c_{ij}x_{ij}\), \(\sum_j x_{ij} \le K_i y_i\), \(\sum_i x_{ij} \ge D_j\)</td><td>06</td></tr>
+        <tr><td>공정 용량</td><td>\(\dfrac{\text{자원 수} \times 60}{\text{소요시간(분)}}\), 전체 용량 = 병목 용량 = \(\min\)</td><td>07</td></tr>
+        <tr><td>흐름율</td><td>\(\min\{\text{가용 유입량}, \text{수요량}, \text{용량}\}\)</td><td>07</td></tr>
+        <tr><td>가동률 · 여유용량</td><td>가동률 = 흐름율 / 용량, 여유용량 = 100% − 평균 가동률</td><td>07</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let done = 0, total = 0;
+    document.querySelectorAll('.ch-card').forEach(card => {
+      const id = card.dataset.ch;
+      const d = (window.RL_STORE && RL_STORE.get('done-' + id)) || {};
+      const t = (window.RL_STORE && RL_STORE.get('total-' + id)) || 0;
+      const n = Object.values(d).filter(Boolean).length;
+      done += n; total += t;
+      if (t) card.querySelector('.mini-bar i').style.width = Math.round(n / t * 100) + '%';
+    });
+    const ov = document.querySelector('.overall');
+    if (total) {
+      const pct = Math.round(done / total * 100);
+      ov.querySelector('.ov-text').textContent = `전체 진도: ${done} / ${total} 섹션 이해 완료 (${pct}%)`;
+      ov.querySelector('.bar i').style.width = pct + '%';
+    } else {
+      ov.querySelector('.ov-text').textContent = '각 섹션의 “이해했으면 체크” 버튼을 누르면 여기 진도가 쌓여요.';
+    }
+
+    // 🔁 복습 필요로 표시한 섹션 모아 보기
+    const PAGES = { '01': ['01. 개념', 'ch01-concept.html'], '02': ['02. 생산 전략', 'ch02-strategy.html'], '03': ['03. 제품 설계', 'ch03-design.html'], '04': ['04. 프로세스', 'ch04-process.html'], '05': ['05. 변동성', 'ch05-variability.html'], '06': ['06. 입지선택', 'ch06-location.html'], '07': ['07. 용량계획', 'ch07-capacity.html'], sum: ['한눈에 요약', 'summary.html'], cmp: ['한눈에 비교', 'compare.html'] };
+    const groups = Object.keys(PAGES).map(k => {
+      const r = (window.RL_STORE && RL_STORE.get('review-' + k)) || {};
+      return [k, Object.entries(r).sort((a, b) => a[1].at - b[1].at)];
+    }).filter(([, items]) => items.length);
+    document.querySelectorAll('.ch-card').forEach(card => {
+      const g = groups.find(([k]) => k === card.dataset.ch);
+      if (g) card.insertAdjacentHTML('beforeend', `<span class="rev-count">🔁 복습 ${g[1].length}</span>`);
+    });
+    const box = document.getElementById('reviewBox');
+    if (groups.length) {
+      const n = groups.reduce((a, [, it]) => a + it.length, 0);
+      box.innerHTML = `<section class="card review-home"><h2>🔁 복습할 것 <span class="ko">${n}개</span></h2>
+        <p style="font-size:15px;color:var(--muted);margin:0 0 6px">각 섹션 오른쪽 위 <b>🔁 복습</b> 버튼으로 표시한 곳이에요. 다 봤으면 그 섹션에서 버튼을 다시 눌러 해제하세요.</p>
+        <div class="rh-grid">${groups.map(([k, items]) => `<div class="rh-col"><div class="rh-ch">${PAGES[k][0]}</div>${items.map(([id, v]) => `<a href="${PAGES[k][1]}#${id}">${(v.t || id).replace(/</g, '&lt;')}</a>`).join('')}</div>`).join('')}</div></section>`;
+    }
+  });
+</script>
+</body>
+</html>

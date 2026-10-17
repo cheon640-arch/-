@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한눈에 요약 — om notebook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..700,0..100,0..1&family=Gaegu:wght@400;700&family=Geist:wght@400;500&family=Gowun+Dodum&family=JetBrains+Mono&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script defer src="assets/app.js"></script>
+<script defer src="assets/notes.js"></script>
+<style>
+  .sum-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+  .sum-grid > div { min-width: 0; }
+  .oneliner { font-family: var(--font-hand); color: var(--sienna); font-size: 25px; line-height: 1.3; margin: 4px 0 10px; }
+  .must { background: #fff; border: 1px solid var(--charcoal); border-radius: 12px; padding: 10px 14px; }
+  .must h4, .trap h4 { margin: 0 0 4px; font-family: var(--font-display); font-size: 17px; }
+  .trap { background: #fff0e6; border: 1px dashed var(--sienna); border-radius: 12px; padding: 10px 14px; }
+  .trap li::marker { content: "⚠ "; }
+  .go { font-family: var(--font-ui); font-size: 14px; }
+  @media (max-width: 760px) { .sum-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body data-ch="sum">
+
+<div class="wrap">
+  <div class="hero">
+    <span class="kicker">시험 전 30분 · 7개 장을 한 페이지로</span>
+    <h1 class="display">everything<br>at a glance</h1>
+    <p class="lede">장마다 <span class="mk">한 줄 요약</span> → 핵심 개념 → 꼭 외울 것 → 자주 헷갈리는 점 순서로 정리했어요. 더 자세한 건 각 장 링크로!</p>
+    <div class="meta">비교표만 따로 보려면 → <a href="compare.html">한눈에 비교</a></div>
+    <div data-sticker="compass" data-rot="8" style="right:8%;top:70px;width:64px;height:64px"></div>
+    <div data-sticker="route" data-rot="-10" style="right:18%;top:200px;width:52px;height:52px"></div>
+  </div>
+
+  <div class="page-grid">
+    <aside class="toc"></aside>
+    <main class="lesson">
+
+<section class="card" id="map" data-toc="전체 흐름 지도">
+  <h2>The Big Map <span class="ko">전체 흐름 지도</span></h2>
+  <p>모든 장은 결국 하나의 질문 — <b>“투입을 산출로 바꾸는 시스템을 어떻게 설계하고 운영할까?”</b> — 에 대한 답이에요.</p>
+  <figure class="fig">
+    <svg viewBox="0 0 720 300" font-family="Geist, Gowun Dodum, sans-serif" font-size="13">
+      <defs><marker id="bm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2b1a07"/></marker></defs>
+      <rect x="240" y="12" width="240" height="44" rx="22" fill="#2b1a07"/><text x="360" y="39" text-anchor="middle" fill="#fff">01 투입 → 프로세스 → 산출</text>
+      <rect x="250" y="80" width="220" height="40" rx="20" fill="#fff" stroke="#2b1a07"/><text x="360" y="105" text-anchor="middle">02 전략: 원가·품질·시간·유연성</text>
+      <g fill="none" stroke="#2b1a07" marker-end="url(#bm)"><path d="M360 56V78"/><path d="M300 120L150 165"/><path d="M420 120L570 165"/></g>
+      <text x="150" y="152" text-anchor="middle" fill="#6b5d4f">시스템 설계 (전략적)</text><text x="570" y="152" text-anchor="middle" fill="#6b5d4f">시스템 운영 (흐름)</text>
+      <g fill="#fff0e6" stroke="#ff6f1e"><rect x="20" y="170" width="120" height="50" rx="12"/><rect x="150" y="170" width="120" height="50" rx="12"/><rect x="280" y="170" width="120" height="50" rx="12"/><rect x="450" y="170" width="120" height="50" rx="12"/><rect x="580" y="170" width="120" height="50" rx="12"/></g>
+      <g text-anchor="middle" fill="#ce500a"><text x="80" y="191">03 무엇을</text><text x="80" y="209" font-size="11">제품 설계</text><text x="210" y="191">04 어떻게</text><text x="210" y="209" font-size="11">프로세스·배치</text><text x="340" y="191">06 어디서</text><text x="340" y="209" font-size="11">입지</text><text x="510" y="191">07 얼마나</text><text x="510" y="209" font-size="11">용량·병목</text><text x="640" y="191">05 왜 줄이?</text><text x="640" y="209" font-size="11">변동성·대기</text></g>
+      <text x="360" y="262" text-anchor="middle" font-family="Gaegu" font-size="20" fill="#ce500a">흐름율 = min{유입, 수요, 용량} · 대기 ∝ u/(1−u) × 변동성</text>
+    </svg>
+  </figure>
+</section>
+
+<section class="card" id="s01" data-toc="01 개념">
+  <h2>01 · 생산운영관리의 개념</h2>
+  <p class="oneliner">“투입을 산출로 바꾸는 프로세스와 시스템을 설계·관리한다”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li>기업의 3대 기능: <b>재무, 마케팅, 생산 및 운영</b></li>
+      <li><b>프로세스</b> = 투입물을 산출물로 변환하는 활동, <b>시스템</b> = 프로세스가 모인 총체적 체계</li>
+      <li>제조업 (자본 집약, 유형, 재고 높음) vs 서비스업 (노동 집약, 무형, 저장 불가, 고객 관여 높음)</li>
+      <li>의사결정: <b>시스템 설계</b> (전략적, 중장기: 제품·프로세스·입지·공급사슬) vs <b>시스템 운영</b> (전술·운영적, 단기: 예측·스케줄·재고)</li>
+      <li>고려사항 5: 시스템적 접근, 측정, 우선순위 (파레토 80/20, ABC), 상쇄관계, 사회적 이슈 (ESG)</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>모형: 문장 · 도식적 · 수리적 (최적화, 휴리스틱)</li><li>테일러 (1911) 과학적 관리법 4원칙</li><li>길브레스 동작연구, 간트 차트, 포드 모델T, 해리스 EOQ (1913), 단찌히 심플렉스 (1947)</li><li>MRP → MRP II → ERP, JIT · 린 · TQM · 6시그마</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>독립적 최적해의 합 ≤ 전체 최적해 → <b>시스템적 접근</b></li><li>릴리안 길브레스 = 피로 (인간 관계론), 프랭크 길브레스 = 동작연구</li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch01-concept.html">→ 01장 자세히</a></p>
+</section>
+
+<section class="card" id="s02" data-toc="02 생산 전략">
+  <h2>02 · 생산 전략과 생산성</h2>
+  <p class="oneliner">“무엇으로 경쟁할지 정하고, 얼마나 효율적인지 잰다”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li><b>미션</b> (존재 이유) → <b>비전</b> (바라는 미래상) → <b>목적</b> (포괄적 성과) → <b>목표</b> (평가 가능) → <b>전략</b> (로드맵) → <b>전술</b> (단기 실행)</li>
+      <li>네 가지 경쟁우선순위: <b>비용, 품질, 시간, 유연성</b> — 사이에 상쇄관계</li>
+      <li>품질 = 디자인 품질 + 프로세스 품질 / 시간 = Time to Market, 신속·정시 납기 / 유연성 = 제품·수량</li>
+      <li>효과성 = 올바른 일을 / 효율성 = 일을 올바르게</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>\(\text{생산성} = \text{산출물} / \text{투입물}\)</li><li>종합 · 단일요소 · 다요소 생산성</li><li>예제: 100/(30+30+20) = 1.25, 60/(3×8) = 2.5 대/(명·시간)</li><li>병상회전율 = 퇴원실 인원수 / 병상수</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>생산성은 <b>상대적</b> 지표 → 과거·경쟁사와 비교</li><li>수요 100인데 200 생산 = 효율↑ 효과성✕</li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch02-strategy.html">→ 02장 자세히</a></p>
+</section>
+
+<section class="card" id="s03" data-toc="03 제품 설계">
+  <h2>03 · 제품 설계 및 개발</h2>
+  <p class="oneliner">“설계는 비용의 5% 지만 원가의 70% 를 정한다”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li>과정: 아이디어 (벤치마킹, 역설계) → 제품 선정 (시장·경제성·기술적 분석) → 예비 설계 · 시제품 → 최종 설계</li>
+      <li><b>동시공학</b>: 초기부터 R&amp;D·제조·마케팅·구매 함께</li>
+      <li>DFM (부품 수↓, 단순화, 표준화) · 가치공학 · 표준화 / 모듈화 · <b>차별화 지연</b></li>
+      <li><b>강건 설계</b>, 다구찌: 변동 원인은 두고 영향을 최소화, 품질 = 사회에 끼친 손실</li>
+      <li><b>QFD</b> 품질의 집 (What = 고객요구, How = 기술특성), <b>카노</b> 5가지 품질, 서비스 블루프린트</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>가치 = 기능 / 비용</li><li>직렬 \(R = \prod R_i\), 병렬 \(R_1 + (1-R_1)R_2\)</li><li>0.9 × 0.8 = 0.72 → 예비 추가 0.9 × 0.96 = 0.864</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>당연적 = 없으면 불만·있어도 당연 / 매력적 = 없어도 괜찮·있으면 감동</li><li>전통적 개념은 규격 안이면 손실 0, 다구찌는 목표값에서 벗어나면 바로 손실</li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch03-design.html">→ 03장 자세히</a></p>
+</section>
+
+<section class="card" id="s04" data-toc="04 프로세스">
+  <h2>04 · 프로세스 분석 · 선택 · 설비배치</h2>
+  <p class="oneliner">“문서화하고, 평가하고, 재설계한다 — 가장 느린 작업장이 주기시간”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li>분석 6단계: 문제 인식 → 범위 → <b>문서화</b> → 성과 평가 → <b>재설계</b> (gap) → 적용 (직원 참여)</li>
+      <li>공정도 기호 5개 (ASME): 작업 ○ · 검사 □ · 운반 ⇨ · 지체 D · 저장 ▽</li>
+      <li>유통공정도 (시간·거리 기재) vs 유통선도 (배치도 위 경로)</li>
+      <li>프로세스 유형: 프로젝트 · 잡숍 · 배치 · 라인 · 연속 (왼→오: 다양성↓ 효율성↑)</li>
+      <li>제품-프로세스 행렬: 보통 <b>대각선</b>, 수직/수평으로 번갈아 이동</li>
+      <li>배치: 공정별 (잡숍·배치) · 제품별 (라인·연속) · 고정위치 (프로젝트) · 셀룰러 (GT)</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>산출률 = 3600 / 주기시간</li><li>효율 = Σt / (n × C), 유휴 = nC − Σt</li><li>현재 150 s · 72.2% / 대안1 120 s · 90.3% · 30개 / 대안2 5작업장 · 86.7%</li><li>달력: 97 m → 61 m</li><li>처리비율: 잡숍 10 – 20%, 라인 90 – 100%</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>대안1 = 최장 작업시간, 대안2 = 최대 후행 작업수</li><li>셀룰러 = <b>서로 다른</b> 기계를 부품군 단위로 모음 (공정별 = 같은 기계끼리)</li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch04-process.html">→ 04장 자세히</a></p>
+</section>
+
+<section class="card" id="s05" data-toc="05 변동성">
+  <h2>05 · 프로세스 변동성</h2>
+  <p class="oneliner">“능력이 남아도 변동성 때문에 줄이 생긴다”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li>변동성 원인 4: 입력 (도착) · 작업 시간 · 자원 가용성 · 흐름단위 경로</li>
+      <li>CV = 표준편차 / 평균. 지수분포: 표준편차 = 평균, 무기억성, CV = 1</li>
+      <li>콜센터 p = 4, a = 5 → u = 80% 인데도 대기 발생</li>
+      <li>대응: 직원 수 계획, 우선순위 규칙 (SPT = 평균 체류시간 최소), 예약·할인, <b>풀링</b>, 버퍼</li>
+      <li>산출 손실: 버퍼 없는 병원 (함축된 활용률), 대기 포기 고객 → 대기시간 단축·버퍼 증가·포기 감소</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>\(u = p/a\), \(T = T_q + p\)</li><li>\(T_q = p \cdot \frac{u}{1-u} \cdot \frac{CV_a^2+CV_p^2}{2}\)</li><li>풀링: \(\frac{p}{m}\cdot\frac{u^{\sqrt{2(m+1)}-1}}{1-u}\cdot\frac{CV_a^2+CV_p^2}{2}\) — 9.00 → 3.95분</li><li>\(I = \frac{1}{a}(T_q+p)\), \(I_q = \frac{T_q}{a}\), \(I_p = u\)</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>u ≥ 100% 이면 줄이 무한히 증가 → 반드시 u &lt; 1</li><li>CV 는 p, u 에 영향 없음 (독립적인 세 요인)</li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch05-variability.html">→ 05장 자세히</a></p>
+</section>
+
+<section class="card" id="s06" data-toc="06 입지선택">
+  <h2>06 · 입지선택</h2>
+  <p class="oneliner">“점수로, 무게중심으로, 비용 직선으로, 최적화로 고른다”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li>주요 입지요인 = 우선경쟁역량에 영향 / 부수적 요인</li>
+      <li>제조업: 시장 근접 · 공급자·자원 근접 · 모기업 근접 · 세금·부동산</li>
+      <li>서비스업: 고객 근접 · 경쟁자 입지 · 시장근접·수송비 · 입지 특유 (교통, 가시성)</li>
+      <li>절차: 평가기준 → 상황요인 → 대안 개발 (국가 → 지역 → 지역사회 → 부지) → 평가·선택</li>
+      <li>분석기법: 최적화 · 휴리스틱 · 시뮬레이션</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>가중점수 = Σ w·s (병원 = 4.0)</li><li>\(ld = \sum l_i(|x_i-x^*|+|y_i-y^*|)\), \(x^* = \sum l_i x_i / \sum l_i\)</li><li>BEP: A/B 5,357, B/C 8,333 → Q = 15,000 이면 C ($945,000)</li><li>복수시설: P3,P4 (24) → P3,P6 → P4,P5 (14)</li><li>네트워크: A, D 폐쇄</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>거리는 직선거리가 아니라 <b>직각거리</b></li><li>D 는 어떤 수요에서도 최저 비용이 아님</li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch06-location.html">→ 06장 자세히</a></p>
+</section>
+
+<section class="card" id="s07" data-toc="07 용량계획">
+  <h2>07 · 용량계획</h2>
+  <p class="oneliner">“가장 좁은 병목이 전체를 정한다”</p>
+  <div class="sum-grid">
+    <div><ul>
+      <li>용량 = 정상 운영에서의 최대 산출률 (잔업·하청 제외)</li>
+      <li>설계 · 기대 · 피크 (단기, 잔업 포함) · 안정 (장기). 서비스업은 피크가 중요</li>
+      <li>측정: 산출지표 (대수) vs 투입지표 (병상, 객실 수)</li>
+      <li>규모의 경제 (고정비 분산) vs 비경제 (복잡성, 관료화) — 호텔 500실이 최저</li>
+      <li>공급 제약 (수요 &gt; 용량) vs 수요 제약 (수요 &lt; 용량)</li>
+      <li>확장적 (여유용량비용) vs 유보적 (단기대응비용) vs 혼합</li>
+    </ul></div>
+    <div>
+      <div class="must"><h4>꼭 외울 것</h4><ul style="font-size:15px"><li>흐름율 = min{가용 유입량, 수요량, 용량}</li><li>공정 용량 = 자원 수 × 60 / 소요시간</li><li>가동률 = 흐름율 / 용량, 여유용량 = 100% − 가동률</li><li>예제1: 병목 굽기 5, 흐름 5, 100%, 0% / 예제2: 병목 도우 8, 흐름 6, 75%, 25%</li></ul></div>
+      <div class="trap" style="margin-top:10px"><h4>헷갈리는 점</h4><ul style="font-size:15px"><li>가동률은 100% 를 넘을 수 없음</li><li>병목을 늘리면 병목이 다른 곳으로 <b>이동</b></li></ul></div>
+    </div>
+  </div>
+  <p class="go"><a href="ch07-capacity.html">→ 07장 자세히</a></p>
+</section>
+
+    </main>
+  </div>
+</div>
+</body>
+</html>
