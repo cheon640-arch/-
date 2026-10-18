@@ -311,14 +311,79 @@
   const render = el => window.RL_RENDER_MATH && window.RL_RENDER_MATH(el);
 
   function drawTabs() {
-    $('setTabs').innerHTML = SETS.map(s => `<button type="button" class="${s.id === cur ? 'on' : ''}" data-s="${s.id}">${s.name}</button>`).join('');
+    const n = wrongList().filter(w => !w.done).length;
+    $('setTabs').innerHTML = SETS.map(s => `<button type="button" class="${s.id === cur ? 'on' : ''}" data-s="${s.id}">${s.name}</button>`).join('') +
+      `<button type="button" class="${cur === 'w' ? 'on' : ''}" data-s="w">📒 틀린 문제 모음${n ? ` (${n})` : ''}</button>`;
   }
-  $('setTabs').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; cur = +b.dataset.s; S.set('mock-set', cur); stopTimer(); load(); };
+  $('setTabs').onclick = e => { const b = e.target.closest('[data-s]'); if (!b) return; cur = b.dataset.s === 'w' ? 'w' : +b.dataset.s; S.set('mock-set', cur); stopTimer(); load(); };
 
   function load() {
+    if (new URLSearchParams(location.search).has('wrong') && !load.once) { cur = 'w'; load.once = true; }
+    if (cur === 'w') { $('bar').hidden = true; drawTabs(); drawWrong(); return; }
+    $('bar').hidden = false;
     st = S.get(key()) || { a: {}, self: {}, graded: false, left: 75 * 60 };
     drawTabs(); draw(); drawTimer();
   }
+
+  /* ---------- 틀린 문제 모음 ---------- */
+  const NUM = '①②③④⑤';
+  function wrongList() {
+    const done = S.get('mock-wrong-done') || {}, out = [];
+    for (const set of SETS) {
+      const s = S.get('mock-' + set.id);
+      if (!s || !s.graded) continue;
+      set.sections.forEach((sec, si) => sec.items.forEach((it, qi) => {
+        const k = `${si}-${qi}`, ans = s.a[k], base = { set, sec, si, qi, it };
+        const push = (status, extra = {}) => { const id = `${set.id}:${extra.pk || k}`; out.push({ ...base, ...extra, id, status, done: !!done[id] }); };
+        if (sec.type === 'ox') { if (ans == null) push('미기재'); else if (ans !== it.a) push('오답', { mine: ans ? 'O' : 'X' }); }
+        else if (sec.type === 'mc') { const a = ans || []; if (!a.length) push('미기재'); else if (!(a.length === it.a.length && a.every(i => it.a.includes(i)))) push('오답', { mine: a.map(i => NUM[i]).join(', ') }); }
+        else if (sec.type === 'sa') { const t = (ans || '').trim(); if (!t) push('미기재'); else if (s.self[k] === 'wrong') push('오답', { mine: t }); else if (!s.self[k]) push('채점 안 함', { mine: t }); }
+        else it.parts.forEach((p, pi) => { const pk = `${k}-${pi}`, t = (s.a[pk] || '').trim(), sc = s.self[pk];
+          if (!t && sc == null) push('미기재', { part: p, pi, pk }); else if (sc == null) push('채점 안 함', { part: p, pi, pk, mine: t }); else if (sc < p.p) push(`부분점수 ${sc}/${p.p}`, { part: p, pi, pk, mine: t }); });
+      }));
+    }
+    return out;
+  }
+  let wFilter = 'all', wShowDone = false;
+  function drawWrong() {
+    const all = wrongList(), list = all.filter(w => (wShowDone || !w.done) && (wFilter === 'all' || (wFilter === 'auto' ? ['ox', 'mc'].includes(w.sec.type) : w.sec.type === wFilter)));
+    const graded = SETS.filter(s => (S.get('mock-' + s.id) || {}).graded).length;
+    const chip = (v, t) => `<button type="button" class="${wFilter === v ? 'on' : ''}" data-wf="${v}">${t}</button>`;
+    let h = `<section class="card"><div class="sec-head"><h2>📒 틀린 문제 모음</h2><span class="rule">채점한 회차 ${graded} / ${SETS.length} · 남은 문제 ${all.filter(w => !w.done).length}개</span></div>
+      <p style="font-size:15px;color:var(--muted);margin:0 0 10px">“채점하기”를 누른 회차에서 <b>오답 · 미기재 · 부분점수 · 아직 직접 채점 안 한 문제</b>를 모았어요. 정답은 가려 두었으니 다시 풀어 보고 열어 보세요. 다 이해했으면 “이해했어요”로 목록에서 빼면 돼요.</p>
+      <div class="set-tabs">${chip('all', '전체')}${chip('auto', '진위·선다')}${chip('sa', '단답')}${chip('es', '서술')}
+        <button type="button" class="${wShowDone ? 'on' : ''}" data-wd="1">이해한 것도 보기</button></div></section>`;
+    if (!graded) h += `<section class="card tint"><p style="margin:0">아직 채점한 회차가 없어요. 모의고사를 풀고 <b>채점하기</b>를 누르면 여기에 틀린 문제가 모여요.</p></section>`;
+    else if (!list.length) h += `<section class="card tint"><p style="margin:0">${all.length ? '이 조건에 해당하는 문제가 없어요.' : '틀린 문제가 하나도 없어요! 🎉'}</p></section>`;
+    const groups = {};
+    list.forEach(w => (groups[w.set.id] = groups[w.set.id] || []).push(w));
+    for (const id in groups) {
+      const set = SETS.find(s => s.id === +id);
+      h += `<section class="card"><h2>${set.name}</h2>${groups[id].map(w => {
+        const n = w.part ? `${w.si + 1}-${w.pi + 1})` : `${w.si + 1}-${w.qi + 1})`;
+        const tone = w.status === '오답' ? '#dc2626' : w.status.startsWith('부분') ? '#ce500a' : '#6b5d4f';
+        let stem = w.part ? `<div style="font-size:15px;color:var(--muted);margin-bottom:6px">${w.it.q}</div><p class="stem"><span class="qn">${n}</span><span class="pts">(${w.part.p}점)</span> ${w.part.q}</p>` : `<p class="stem"><span class="qn">${n}</span>${w.it.q}</p>`;
+        if (w.sec.type === 'mc') stem += `<div class="mc-grid" style="margin-bottom:6px">${w.it.c.map((c, i) => `<div class="mc-opt" style="cursor:default"><span class="k">${NUM[i]}</span><span>${c}</span></div>`).join('')}</div>`;
+        const correct = w.sec.type === 'ox' ? `<span class="k-title">정답 ${w.it.a ? 'O' : 'X'}</span> — ${w.it.ex}` : w.sec.type === 'mc' ? `<span class="k-title">정답 ${w.it.a.map(i => NUM[i]).join(', ')}</span> — ${w.it.ex}` : w.part ? `<span class="k-title">모범답안</span><div>${w.part.ans}</div><div style="font-size:14px;color:var(--muted);margin-top:6px">채점 기준: ${w.part.rubric}</div>` : `<span class="k-title">모범답안</span><div>${w.it.ans}</div>`;
+        return `<div class="q" style="${w.done ? 'opacity:.55' : ''}">
+          <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:var(--font-ui);font-size:13px;margin-bottom:6px"><span style="color:${tone};font-weight:600">● ${w.status}</span><span style="color:var(--muted)">${w.sec.title}</span></div>
+          ${stem}
+          ${w.mine != null ? `<div style="font-family:var(--font-ui);font-size:14px;margin:4px 0"><span style="color:var(--muted)">내 답:</span> <span style="white-space:pre-wrap">${esc(w.mine)}</span></div>` : ''}
+          <details style="margin-top:8px"><summary style="cursor:pointer;font-family:var(--font-ui);font-size:14px;color:var(--sienna)">정답 · 해설 보기</summary><div class="key" style="display:block">${correct}</div></details>
+          <div class="self"><button type="button" class="${w.done ? 'on' : ''}" data-wdone="${w.id}">${w.done ? '다시 목록에 넣기' : '이해했어요 ✓'}</button><button type="button" data-wgo="${w.set.id}">${w.set.name} 열기 →</button></div></div>`;
+      }).join('')}</section>`;
+    }
+    $('exam').innerHTML = h;
+    render($('exam'));
+  }
+  $('exam').addEventListener('click', e => {
+    if (cur !== 'w') return;
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.wf) { wFilter = b.dataset.wf; drawWrong(); }
+    else if (b.dataset.wd) { wShowDone = !wShowDone; drawWrong(); }
+    else if (b.dataset.wdone) { const d = S.get('mock-wrong-done') || {}; if (d[b.dataset.wdone]) delete d[b.dataset.wdone]; else d[b.dataset.wdone] = 1; S.set('mock-wrong-done', d); drawTabs(); drawWrong(); }
+    else if (b.dataset.wgo) { cur = +b.dataset.wgo; S.set('mock-set', cur); load(); scrollTo(0, 0); }
+  });
 
   function draw() {
     const set = SETS.find(s => s.id === cur);
@@ -414,7 +479,7 @@
     drawTimer();
   };
 
-  document.addEventListener('DOMContentLoaded', load);
+  document.addEventListener('DOMContentLoaded', () => { cur = S.get('mock-set') || 1; load(); });
 })();
 </script>
 </body>
